@@ -1,9 +1,6 @@
 /**
-* Template Name: SnapFolio
-* Template URL: https://bootstrapmade.com/snapfolio-bootstrap-portfolio-template/
-* Updated: Jul 21 2025 with Bootstrap v5.3.7
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
+* Updated: Feb 09 2026 with Bootstrap v5.3.7
+* Author: Alejandro Muñoz Salas
 */
 
 (function() {

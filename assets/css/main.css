@@ -1,3 +1,4 @@
+
 /**
 * Template Name: SnapFolio
 * Template URL: https://bootstrapmade.com/snapfolio-bootstrap-portfolio-template/
@@ -190,8 +191,7 @@ h6 {
 
 @media (min-width: 1200px) {
 
-  .header~main,
-  .header~#footer {
+  .header~main {
     margin-left: 330px;
   }
 }
