@@ -112,7 +112,7 @@
     currentX = startX;
 
     if ((!header.classList.contains('header-show') && e.target.closest('.swipe-area')) ||
-        header.classList.contains('header-show')) {
+      header.classList.contains('header-show')) {
       isDragging = true;
       header.style.transition = 'none';
     }
@@ -304,9 +304,9 @@
   =============================== */
   function normalizePath(path) {
     return path.replace(window.location.origin, '')
-               .replace(/index\.html$/, '')
-               .replace(/\.html$/, '')
-               .replace(/\/$/, '');
+      .replace(/index\.html$/, '')
+      .replace(/\.html$/, '')
+      .replace(/\/$/, '');
   }
 
   function openMenuByCurrentURL() {
@@ -332,5 +332,27 @@
   }
 
   window.addEventListener('load', openMenuByCurrentURL);
+
+  /* ===============================
+   Dark / Light
+=============================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleThemeBtn = document.getElementById('toggle-theme');
+    if (!toggleThemeBtn) return;
+
+    // Aplicar tema guardado al cargar
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+
+    // Alternar tema al hacer clic
+    toggleThemeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const mode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+      localStorage.setItem('theme', mode);
+    });
+  });
+
+
 
 })();
