@@ -1,0 +1,51 @@
+/**
+* Template Name: portfolio
+* Template URL: https://alejandroms.es
+* Updated: Feb 10 2026 with Bootstrap v5.3.7
+* Author: Alejandro Muñoz Salas
+*/
+
+/*--------------------------------------------------------------
+# Markdown
+--------------------------------------------------------------*/
+#md-content pre.markdown-code {
+    position: relative;
+    background: var(--default-color);
+    border-radius: 10px;
+    padding: 2.2rem 1rem 1rem;
+    /* padding-top suficiente para el nombre del lenguaje */
+    margin: 2rem 0;
+    overflow-x: auto;
+    color: #c9d1d9;
+    font-size: 0.95rem;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  /* Quitar fondo al code */
+  #md-content pre.markdown-code code {
+    background: transparent !important;
+    padding: 0;
+    border-radius: 0;
+    display: block;
+  }
+  
+  /* Botón copiar */
+  #md-content pre.markdown-code .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+  }
+  
+  /* Lenguaje arriba a la izquierda */
+  #md-content pre.markdown-code::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 0.7rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    font-weight: 500;
+  }

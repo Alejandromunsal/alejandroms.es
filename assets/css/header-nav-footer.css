@@ -1,0 +1,238 @@
+/**
+* Template Name: portfolio
+* Template URL: https://alejandroms.es
+* Updated: Feb 10 2026 with Bootstrap v5.3.7
+* Author: Alejandro Muñoz Salas
+*/
+
+/*--------------------------------------------------------------
+# Global Header
+--------------------------------------------------------------*/
+.header {
+    --background-color: #1b1b1b;
+    --contrast-color: #444444;
+    color: var(--default-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0 15px;
+    width: 300px;
+    transition: all ease-in-out 0.3s;
+    overflow-y: auto;
+    z-index: 997;
+  }
+  
+  .header .header-container {
+    border-radius: 20px;
+    padding: 15px;
+    background-color: var(--background-color);
+    border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  }
+  
+  .header .social-links {
+    margin: 0 0 10px 0;
+  }
+  
+  .header .social-links a {
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--default-color), transparent 90%);
+    color: var(--default-color);
+    margin: 0 2px;
+    border-radius: 50%;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    transition: 0.3s;
+  }
+  
+  .header .social-links a:hover {
+    color: var(--contrast-color);
+    background: var(--accent-color);
+  }
+  
+  @media (min-width: 1200px) {
+  
+    .header~main {
+      margin-left: 330px;
+    }
+  }
+  
+  @media (max-width: 1199px) {
+    .header {
+      left: -100%;
+    }
+  }
+  
+  .header.header-show {
+    left: 0;
+  }
+  
+  .header .header-toggle {
+    color: var(--contrast-color);
+    background-color: var(--accent-color);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+    transition: background-color 0.3s;
+  }
+  
+  .header .header-toggle:hover {
+    color: var(--contrast-color);
+    background-color: color-mix(in srgb, var(--accent-color) 90%, white 15%);
+  }
+  
+  /*--------------------------------------------------------------
+  # Navigation Menu
+  --------------------------------------------------------------*/
+  .mobile-nav-toggle {
+    display: none;
+  }
+  
+  .navmenu {
+    padding: 0;
+    z-index: 9997;
+    width: 100%;
+  }
+  
+  .navmenu ul {
+    list-style: none;
+    padding: 0 0 20px 0;
+    margin: 0;
+  }
+  
+  .navmenu a,
+  .navmenu a:focus {
+    color: var(--nav-color);
+    padding: 15px 10px;
+    font-family: var(--nav-font);
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: 0.3s;
+    width: 100%;
+  }
+  
+  .navmenu a .navicon,
+  .navmenu a:focus .navicon {
+    font-size: 20px;
+    margin-right: 10px;
+  }
+  
+  .navmenu a .toggle-dropdown,
+  .navmenu a:focus .toggle-dropdown {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.3s;
+    flex-shrink: 0;
+    background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  }
+  
+  .navmenu a .toggle-dropdown:hover,
+  .navmenu a:focus .toggle-dropdown:hover {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+  }
+  
+  .navmenu a:hover,
+  .navmenu .active,
+  .navmenu .active:focus {
+    color: var(--nav-hover-color);
+  }
+  
+  .navmenu a:hover .navicon,
+  .navmenu .active .navicon,
+  .navmenu .active:focus .navicon {
+    color: var(--accent-color);
+  }
+  
+  .navmenu .active .toggle-dropdown,
+  .navmenu .active:focus .toggle-dropdown {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    transform: rotate(180deg);
+  }
+  
+  .navmenu .dropdown {
+    display: block;
+  }
+  
+  .navmenu .dropdown a,
+  .navmenu .dropdown a:focus {
+    color: --nav-dropdown-color;
+  }
+  
+  .navmenu .dropdown a:hover,
+  .navmenu .dropdown .active,
+  .navmenu .dropdown .active:focus {
+    color: var(--nav-dropdown-hover-color);
+  }
+  
+  .navmenu .dropdown ul {
+    position: static;
+    display: none;
+    z-index: 99;
+    padding: 5px 10px;
+    margin: 5px 10px;
+    background-color: var(--nav-dropdown-background-color);
+    border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+    box-shadow: none;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .navmenu .dropdown ul ul {
+    background-color: rgba(33, 37, 41, 0.1);
+  }
+  
+  .navmenu .dropdown>.dropdown-active {
+    display: block;
+    background-color: rgba(33, 37, 41, 0.03);
+  }
+  
+  /*--------------------------------------------------------------
+  # Global Footer
+  --------------------------------------------------------------*/
+  .footer {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    font-size: 14px;
+    padding: 0 0 40px 0;
+    position: relative;
+  }
+  
+  .footer .copyright {
+    padding-top: 40px;
+    border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  }
+  
+  .footer .copyright p {
+    margin-bottom: 0;
+  }
+  
+  .footer .credits {
+    margin-top: 4px;
+    font-size: 13px;
+    text-align: center;
+  }
+  

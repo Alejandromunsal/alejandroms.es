@@ -1,0 +1,732 @@
+/*--------------------------------------------------------------
+# Font & Color Variables
+# Help: https://bootstrapmade.com/color-system/
+--------------------------------------------------------------*/
+/* Fonts */
+:root {
+    --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --heading-font: "Ubuntu",  sans-serif;
+    --nav-font: "Nunito",  sans-serif;
+  }
+  
+  /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
+  :root { 
+    --background-color: #1f1f1f; /* Background color for the entire website, including individual sections */
+    --default-color: #ffffff; /* Default color used for the majority of the text content across the entire website */
+    --heading-color: #ffffff; /* Color for headings, subheadings and title throughout the website */
+    --accent-color: #ececec; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+    --surface-color: #232323; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
+    --contrast-color: #310606; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
+    --header-color: color-mix(in srgb, var(--default-color), transparent 80%);
+  }
+  
+  /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
+  :root {
+    --nav-color: rgba(236, 236, 236, 0.59);  /* The default color of the main navmenu links */
+    --nav-hover-color: #ffffff; /* Applied to main navmenu links when they are hovered over or active */
+    --nav-mobile-background-color: #393939; /* Used as the background color for mobile navigation menu */
+    --nav-dropdown-background-color: #393939; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+    --nav-dropdown-color: #ffffff; /* Used for navigation links of the dropdown items in the navigation menu. */
+    --nav-dropdown-hover-color: #ececec; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  }
+  
+  /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
+  
+  .light-background {
+    --background-color: #2c2c2c;
+    --surface-color: #323232;
+  }
+  
+  .dark-background {
+    --background-color: #040b14;
+    --default-color: #ffffff;
+    --heading-color: #ffffff;
+    --surface-color: #151f2b;
+    --contrast-color: #ffffff;
+  }
+  
+  /* Smooth scroll */
+  :root {
+    scroll-behavior: smooth;
+  }
+  
+  /*--------------------------------------------------------------
+  # General Styling & Shared Classes
+  --------------------------------------------------------------*/
+  body {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    font-family: var(--default-font);
+  }
+  
+  a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  
+  a:hover {
+    color: color-mix(in srgb, var(--accent-color), transparent 25%);
+    text-decoration: none;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--heading-color);
+    font-family: var(--heading-font);
+  }
+  
+  /* PHP Email Form Messages
+  ------------------------------*/
+  .php-email-form .error-message {
+    display: none;
+    background: #df1529;
+    color: #ffffff;
+    text-align: left;
+    padding: 15px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  
+  .php-email-form .sent-message {
+    display: none;
+    color: #ffffff;
+    background: #059652;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  
+  .php-email-form .loading {
+    display: none;
+    background: var(--surface-color);
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 24px;
+  }
+  
+  .php-email-form .loading:before {
+    content: "";
+    display: inline-block;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin: 0 10px -6px 0;
+    border: 3px solid var(--accent-color);
+    border-top-color: var(--surface-color);
+    animation: php-email-form-loading 1s linear infinite;
+  }
+  
+  @keyframes php-email-form-loading {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+/*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    overflow: hidden;
+    background: var(--background-color);
+    transition: all 0.6s ease-out;
+  }
+  
+  #preloader:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #ffffff;
+    border-color: var(--accent-color) transparent var(--accent-color) transparent;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: animate-preloader 1.5s linear infinite;
+  }
+  
+  @keyframes animate-preloader {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /*--------------------------------------------------------------
+  # Scroll Top Button
+  --------------------------------------------------------------*/
+  .scroll-top {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    right: 15px;
+    bottom: -15px;
+    z-index: 99999;
+    background-color: var(--accent-color);
+    width: 44px;
+    height: 44px;
+    border-radius: 50px;
+    transition: all 0.4s;
+  }
+  
+  .scroll-top i {
+    font-size: 24px;
+    color: var(--contrast-color);
+    line-height: 0;
+  }
+  
+  .scroll-top:hover {
+    background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+    color: var(--contrast-color);
+  }
+  
+  .scroll-top.active {
+    visibility: visible;
+    opacity: 1;
+    bottom: 15px;
+  }
+  
+  /*--------------------------------------------------------------
+  # Disable aos animation delay on mobile devices
+  --------------------------------------------------------------*/
+  @media screen and (max-width: 768px) {
+    [data-aos-delay] {
+      transition-delay: 0 !important;
+    }
+  }
+  
+  /*--------------------------------------------------------------
+  # Global Page Titles & Breadcrumbs
+  --------------------------------------------------------------*/
+  .page-title {
+    color: var(--default-color);
+    padding: 25px 0 0 0;
+    position: relative;
+  }
+  
+  .page-title .container {
+    border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+    padding-bottom: 25px;
+  }
+  
+  .page-title h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .page-title .breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .page-title .breadcrumbs ol li+li {
+    padding-left: 10px;
+  }
+  
+  .page-title .breadcrumbs ol li+li::before {
+    content: "/";
+    display: inline-block;
+    padding-right: 10px;
+    color: color-mix(in srgb, var(--default-color), transparent 70%);
+  }
+  
+  /*--------------------------------------------------------------
+  # Global Sections
+  --------------------------------------------------------------*/
+  section,
+  .section {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding: 60px 0;
+    overflow: clip;
+  }
+  
+  /*--------------------------------------------------------------
+  # Global Section Titles
+  --------------------------------------------------------------*/
+  .section-title {
+    text-align: center;
+    padding-bottom: 60px;
+    position: relative;
+  }
+  
+  .section-title h2 {
+    font-size: 32px;
+    font-weight: 700;
+    position: relative;
+  }
+  
+  .section-title h2:before,
+  .section-title h2:after {
+    content: "";
+    width: 50px;
+    height: 2px;
+    background: var(--accent-color);
+    display: inline-block;
+  }
+  
+  .section-title h2:before {
+    margin: 0 15px 10px 0;
+  }
+  
+  .section-title h2:after {
+    margin: 0 0 10px 15px;
+  }
+  
+  .section-title p {
+    margin-bottom: 0;
+  }
+
+/*--------------------------------------------------------------
+# Stats Section
+--------------------------------------------------------------*/
+.stats .stats-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  @media (max-width: 992px) {
+    .stats .stats-wrapper {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .stats .stats-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .stats .stats-item {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--surface-color), transparent 5%), var(--surface-color));
+    border-radius: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+  
+  .stats .stats-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stats .stats-item:hover .icon-wrapper {
+    transform: scale(1.1);
+  }
+  
+  .stats .stats-item:nth-child(1) .icon-wrapper {
+    background-color: color-mix(in srgb, var(--accent-color), transparent 85%);
+  }
+  
+  .stats .stats-item:nth-child(1) .icon-wrapper i {
+    color: color-mix(in srgb, var(--accent-color), transparent 10%);
+  }
+  
+  .stats .stats-item:nth-child(2) .icon-wrapper {
+    background-color: color-mix(in srgb, #ff7e00, transparent 85%);
+  }
+  
+  .stats .stats-item:nth-child(2) .icon-wrapper i {
+    color: color-mix(in srgb, #ff7e00, transparent 10%);
+  }
+  
+  .stats .stats-item:nth-child(3) .icon-wrapper {
+    background-color: color-mix(in srgb, #00c875, transparent 85%);
+  }
+  
+  .stats .stats-item:nth-child(3) .icon-wrapper i {
+    color: color-mix(in srgb, #00c875, transparent 10%);
+  }
+  
+  .stats .stats-item:nth-child(4) .icon-wrapper {
+    background-color: color-mix(in srgb, #e83e8c, transparent 85%);
+  }
+  
+  .stats .stats-item:nth-child(4) .icon-wrapper i {
+    color: color-mix(in srgb, #e83e8c, transparent 10%);
+  }
+  
+  .stats .stats-item .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .stats .stats-item .icon-wrapper i {
+    font-size: 36px;
+  }
+  
+  .stats .stats-item span {
+    display: block;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin-bottom: 10px;
+    line-height: 1;
+    font-family: var(--heading-font);
+  }
+  
+  .stats .stats-item p {
+    color: var(--default-color);
+    font-size: 18px;
+    margin: 0;
+    font-weight: 500;
+    font-family: var(--heading-font);
+    opacity: 0.8;
+  }
+  
+  /*--------------------------------------------------------------
+  # Skills Section
+  --------------------------------------------------------------*/
+  .skills .skills-category {
+    background-color: var(--surface-color);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: transform 0.3s;
+  }
+  
+  .skills .skills-category:hover {
+    transform: translateY(-5px);
+  }
+  
+  .skills .skills-category h3 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+  
+  .skills .skills-category h3:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: var(--accent-color);
+  }
+  
+  .skills .skill-item {
+    margin-bottom: 25px;
+  }
+  
+  .skills .skill-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .skills .skill-item h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .skills .skill-item .skill-percentage {
+    font-size: 14px;
+    color: color-mix(in srgb, var(--heading-color), transparent 30%);
+  }
+  
+  .skills .skill-item .progress {
+    height: 8px;
+    background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .skills .skill-item .progress .progress-bar {
+    background-color: var(--accent-color);
+    transition: width 1.5s ease-in-out;
+    width: 0;
+    height: 100%;
+    border-radius: 20px;
+  }
+  
+  .skills .skill-item .skill-tooltip {
+    font-size: 14px;
+    color: color-mix(in srgb, var(--default-color), transparent 30%);
+    margin-top: 8px;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s;
+  }
+  
+  .skills .skill-item:hover .skill-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .skills .skill-box {
+    background-color: var(--surface-color);
+    padding: 25px 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .skills .skill-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .skills .skill-box:hover i {
+    color: var(--accent-color);
+    transform: scale(1.1);
+  }
+  
+  .skills .skill-box:hover .skill-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .skills .skill-box i {
+    font-size: 36px;
+    color: color-mix(in srgb, var(--accent-color), transparent 20%);
+    margin-bottom: 15px;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+  
+  .skills .skill-box h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .skills .skill-box .skill-tooltip {
+    font-size: 14px;
+    color: color-mix(in srgb, var(--default-color), transparent 30%);
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.3s;
+  }
+  
+  @media (max-width: 991.98px) {
+    .skills .skills-category {
+      margin-bottom: 30px;
+    }
+  
+    .skills .skills-category:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  @media (max-width: 767.98px) {
+    .skills .skill-box {
+      margin-bottom: 20px;
+    }
+  
+    .skills .skill-box:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+
+/*--------------------------------------------------------------
+# Testimonials Section
+--------------------------------------------------------------*/
+.testimonials .testimonial-masonry {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+  
+  .testimonials .testimonial-masonry::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, color-mix(in srgb, var(--accent-color), transparent 95%), transparent);
+    opacity: 0.5;
+    z-index: -1;
+  }
+  
+  .testimonials .testimonial-item:nth-child(3n-1) {
+    margin-top: 3rem;
+  }
+  
+  .testimonials .testimonial-item:nth-child(3n) {
+    margin-top: 1.5rem;
+  }
+  
+  .testimonials .testimonial-item.highlight .testimonial-content {
+    background-color: color-mix(in srgb, var(--accent-color), transparent 92%);
+    border: 1px solid color-mix(in srgb, var(--accent-color), transparent 70%);
+  }
+  
+  .testimonials .testimonial-item.highlight .testimonial-content .quote-pattern {
+    background-color: color-mix(in srgb, var(--accent-color), transparent 85%);
+  }
+  
+  .testimonials .testimonial-item.highlight .testimonial-content .quote-pattern i {
+    color: var(--accent-color);
+  }
+  
+  .testimonials .testimonial-content {
+    background-color: var(--surface-color);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  }
+  
+  .testimonials .testimonial-content:hover {
+    transform: translateY(-5px);
+  }
+  
+  .testimonials .testimonial-content p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  
+  .testimonials .quote-pattern {
+    position: absolute;
+    top: -1.25rem;
+    left: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--surface-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  }
+  
+  .testimonials .quote-pattern i {
+    font-size: 1.25rem;
+    color: var(--accent-color);
+  }
+  
+  .testimonials .client-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  }
+  
+  .testimonials .client-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .testimonials .client-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .testimonials .client-details h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .testimonials .client-details .position {
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--heading-color), transparent 40%);
+  }
+  
+  @media (max-width: 1199.98px) {
+    .testimonials .testimonial-masonry {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  
+    .testimonials .testimonial-item:nth-child(3n-1),
+    .testimonials .testimonial-item:nth-child(3n) {
+      margin-top: 0;
+    }
+  
+    .testimonials .testimonial-item:nth-child(even) {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (max-width: 767.98px) {
+    .testimonials .testimonial-masonry {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  
+    .testimonials .testimonial-item:nth-child(even) {
+      margin-top: 0;
+    }
+  
+    .testimonials .testimonial-content {
+      padding: 1.5rem;
+    }
+  
+    .testimonials .testimonial-content p {
+      font-size: 0.9375rem;
+      margin: 1.25rem 0;
+    }
+  
+    .testimonials .quote-pattern {
+      width: 2.25rem;
+      height: 2.25rem;
+      top: -1.125rem;
+    }
+  
+    .testimonials .quote-pattern i {
+      font-size: 1.125rem;
+    }
+  
+    .testimonials .client-info {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+    }
+  
+    .testimonials .client-image {
+      width: 45px;
+      height: 45px;
+    }
+  
+    .testimonials .client-details h3 {
+      font-size: 1rem;
+    }
+  
+    .testimonials .client-details .position {
+      font-size: 0.8125rem;
+    }
+  }
+  
+        
