@@ -1,4 +1,4 @@
-# Servidor LEMP en Debian 12 en LXC (Proxmox) prueba
+# Servidor LEMP en Debian 12 en LXC (Proxmox)
 
 ## Introducción
 
