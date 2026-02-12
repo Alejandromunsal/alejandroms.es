@@ -4,10 +4,12 @@ const ICON_OK = `<i class="bi bi-check2"></i>`;
 const ICON_ERROR = `<i class="bi bi-exclamation-triangle"></i>`;
 
 function loadMarkdown(mdFile, containerId, dateContainerId = null) {
-  fetch(mdFile)
+  fetch(`/content/tutorials/${mdFile}?v=${Date.now()}`)
     .then(res => res.text())
     .then(md => {
       const container = document.getElementById(containerId);
+      if (!container) return;
+
       container.innerHTML = marked.parse(md);
 
       container.querySelectorAll('pre code').forEach(codeBlock => {
@@ -16,19 +18,16 @@ function loadMarkdown(mdFile, containerId, dateContainerId = null) {
         const pre = codeBlock.parentElement;
         pre.classList.add('markdown-code');
 
-        // Detectar lenguaje y setear data
         const langClass = [...codeBlock.classList].find(c => c.startsWith('language-'));
         const language = langClass ? langClass.replace('language-', '') : 'text';
         pre.setAttribute('data-lang', language);
 
-        // Botón copiar
         if (!pre.querySelector('.copy-btn')) {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'copy-btn btn btn-sm btn-light';
           btn.innerHTML = ICON_COPY;
 
-          // Tooltip Bootstrap
           btn.setAttribute('data-bs-toggle', 'tooltip');
           btn.setAttribute('data-bs-placement', 'left');
           btn.setAttribute('title', 'Copiar');
@@ -44,29 +43,32 @@ function loadMarkdown(mdFile, containerId, dateContainerId = null) {
         }
       });
 
-      // Fecha de modificación
       if (dateContainerId) {
-        fetch('/forms/get-md-date.php?file=' + mdFile)
+        fetch(`/forms/get-md-date.php?file=/content/tutorials/${mdFile}`)
           .then(res => res.json())
           .then(data => {
             if (data.lastModified) {
               const date = new Date(data.lastModified * 1000);
-              document.getElementById(dateContainerId).innerText =
-                `Última actualización: ${date.toLocaleDateString('es-ES')} · Alejandro Muñoz Salas`;
+              const dateContainer = document.getElementById(dateContainerId);
+              if (dateContainer) {
+                dateContainer.innerText =
+                  `Última actualización: ${date.toLocaleDateString('es-ES')} · Alejandro Muñoz Salas`;
+              }
             }
           });
       }
     })
     .catch(err => {
       console.error(err);
-      document.getElementById(containerId).innerHTML =
-        '<p>No se pudo cargar el contenido.</p>';
+      const container = document.getElementById(containerId);
+      if (container) container.innerHTML = '<p>No se pudo cargar el contenido.</p>';
     });
 }
 
 /* =========================
    Copiar + feedback
 ========================= */
+
 function copyCode(text, btn) {
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text)
@@ -97,6 +99,8 @@ function fallbackCopy(text, btn) {
 
 function copiedFeedback(btn) {
   const tooltip = bootstrap.Tooltip.getInstance(btn);
+  if (!tooltip) return;
+
   btn.innerHTML = ICON_OK;
   btn.classList.add('text-success');
   tooltip.setContent({ '.tooltip-inner': 'Copiado' });
@@ -110,6 +114,8 @@ function copiedFeedback(btn) {
 
 function errorFeedback(btn) {
   const tooltip = bootstrap.Tooltip.getInstance(btn);
+  if (!tooltip) return;
+
   btn.innerHTML = ICON_ERROR;
   btn.classList.add('text-danger');
   tooltip.setContent({ '.tooltip-inner': 'Error' });
@@ -120,3 +126,21 @@ function errorFeedback(btn) {
     tooltip.setContent({ '.tooltip-inner': 'Copiar' });
   }, 1500);
 }
+
+/* =========================
+   Inicialización automática desde el nombre del HTML
+========================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const containerId = 'md-content';
+  const dateContainerId = 'md-date';
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Tomar el nombre del HTML actual
+  let path = window.location.pathname.split('/').filter(Boolean); 
+  let htmlFile = path[path.length - 1] || 'index.html'; // e.g., "servidor-lemp.html"
+  let mdFile = htmlFile.replace(/\.html$/, '.md');      // "servidor-lemp.md"
+
+  loadMarkdown(mdFile, containerId, dateContainerId);
+});
