@@ -18,12 +18,15 @@
     --surface-color: #232323; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
     --contrast-color: #310606; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
     --header-color: color-mix(in srgb, var(--default-color), transparent 80%);
+    --header-border-right:var(--header-color);
     --color-mix-header-container-1: color-mix(in srgb, var(--background-color), white 4%);
     --color-mix-header-container-2: color-mix(in srgb, var(--accent-color) 90%, white 15%);
     --color-mix-header-container-3: color-mix(in srgb, var(--background-color), white 5%);
     --color-mix-header-container-4: color-mix(in srgb, var(--background-color), white 10%);
     --social-link-color: color-mix(in srgb, var(--default-color), transparent 90%);
     --stats-background-color: linear-gradient(135deg, color-mix(in srgb, var(--surface-color), transparent 5%), var(--surface-color));
+    --scroll-bar-color: #ececec;
+    --md-box-color: var(--default-color);
   }
   
   :root {
@@ -46,28 +49,32 @@
     --background-color: #f5f5f5;      /* Fondo general muy claro */
     --default-color: #1f1f1f;         /* Color de texto principal (oscuro) */
     --heading-color: #111111;         /* Encabezados más oscuros que el texto normal */
-    --accent-color: #ff6600;          /* Color de acento, se puede mantener o cambiar */
+    --accent-color: #D4A017;          /* Color de acento, se puede mantener o cambiar */
     --surface-color: #ffffff;         /* Fondo de tarjetas, cajas y secciones */
     --contrast-color: #ececec;        /* Color de contraste para elementos sobre acentos */
     --header-color: color-mix(in srgb, var(--default-color), transparent 80%);
+    --header-border-right: color-mix(in srgb, var(--accent-color), transparent 50%);
     --color-mix-header-container-1: #ffffff;
     --color-mix-header-container-2: color-mix(in srgb, var(--accent-color) 90%, black 15%);
     --color-mix-header-container-3: color-mix(in srgb, var(--background-color), black 5%);
     --color-mix-header-container-4: color-mix(in srgb, var(--background-color), black 10%);
     --social-link-color: color-mix(in srgb, var(--accent-color), transparent 50%);
     --stats-background-color: linear-gradient(135deg, color-mix(in srgb, var(--surface-color), transparent 5%), var(--surface-color));
+    --scroll-bar-color: #1f1f1f;
+    --md-box-color: #ffffff;
+
 
     body.light-mode {
-      --section-alt-bg: #ff6600;
+      --section-alt-bg: #D4A017;
       --section-alt-surface: #ececec;
     }
     /* Nav Menu Colors */
     --nav-color: rgba(31, 31, 31, 0.7);        /* Links normales en nav (oscuro semi-transparente) */
-    --nav-hover-color: #ff6600;                /* Links al pasar hover */
+    --nav-hover-color: #D4A017;                /* Links al pasar hover */
     --nav-mobile-background-color: #e6e6e6;    /* Fondo menú móvil */
     --nav-dropdown-background-color: #f0f0f0;  /* Fondo dropdown */
     --nav-dropdown-color: #1f1f1f;             /* Texto dropdown */
-    --nav-dropdown-hover-color: #ff6600;       /* Hover dropdown (acento) */
+    --nav-dropdown-hover-color: #D4A017;       /* Hover dropdown (acento) */
   }
   
   /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -80,7 +87,6 @@
   .dark-background {
     --background-color: #040b14;
     --default-color: #ffffff;
-    --heading-color: #ffffff;
     --surface-color: #151f2b;
     --contrast-color: #ffffff;
   }
@@ -118,6 +124,18 @@
   h6 {
     color: var(--heading-color);
     font-family: var(--heading-font);
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap; /* evita que se rompa la línea */
+    border: 0;
   }
   
   /* PHP Email Form Messages
@@ -266,6 +284,8 @@
   .page-title h1 {
     font-size: 24px;
     font-weight: 700;
+    color: var(--heading-color); /* <- Esto asegura que cambie con el theme */
+
   }
   
   .page-title .breadcrumbs ol {

@@ -5,8 +5,9 @@
 /*--------------------------------------------------------------
 # Estilos base (móvil por defecto)
 --------------------------------------------------------------*/
-.header {
 
+
+.header {
     color: var(--default-color);
     position: fixed;
     top: 0;
@@ -14,9 +15,7 @@
     bottom: 0;
     width: 300px;
     z-index: 997;
-
-    /* cerrado por defecto en móviles */
-    transform: translateX(-100%);
+    transform: translateX(-98%);
     transition: transform 0.3s ease;
     will-change: transform;
 }
@@ -28,17 +27,16 @@
 
 /* Hint lateral visible cuando cerrado */
 .header.header-closed {
-    transform: translateX(-99%);
+    transform: translateX(-98%);
     width: 300px;
     max-height: none;
-    background-color: transparent;
-    border-left: 4px solid var(--accent-color);
     background: linear-gradient(to right, var(--accent-color) 4px, transparent 0);
+    border-left: 4px solid var(--accent-color);
 }
 
 /* Hint lateral más visible (para indicar swipe) */
 .header.header-hint {
-    transform: translateX(-90%);
+    transform: translateX(-98%);
     width: 300px;
     max-height: none;
     background-color: transparent;
@@ -50,7 +48,7 @@
     padding: 15px;
     background-color: var(--color-mix-header-container-1);
     border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
-    border-right: 4px solid var(--header-color);
+    border-right: 4px solid var(--header-border-right);
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);
     max-height: calc(100vh - 30px);
     overflow-y: auto;
@@ -58,7 +56,7 @@
     scroll-behavior: smooth;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--accent-color), transparent 65%) transparent;
+    scrollbar-color: color-mix(in srgb, var(--scroll-bar-color), transparent 65%) transparent;
 }
 
 /* Zona de swipe en móviles */
@@ -67,10 +65,10 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 180px; /* ancho de la zona de swipe */
+        width: 180px;
         height: 100vh;
-        z-index: 9998; /* por encima del contenido pero debajo del toggle */
-        touch-action: pan-y; /* permite swipe horizontal sin bloquear scroll vertical */
+        z-index: 9998;
+        touch-action: pan-y;
     }
 
     .swipe-hint {
@@ -87,7 +85,7 @@
     }
 
     @keyframes swipeHintPulse {
-        0%, 100% { transform: translateX(-100%); }
+        0%,100% { transform: translateX(-100%); }
         25% { transform: translateX(10px); }
         50% { transform: translateX(0); }
         75% { transform: translateX(10px); }
@@ -107,28 +105,30 @@
 .header .header-container::-webkit-scrollbar {
     width: 6px;
 }
+
 .header .header-container::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .header .header-container::-webkit-scrollbar-thumb {
     background-color: color-mix(in srgb, var(--accent-color), transparent 65%);
     border-radius: 10px;
 }
+
 .header .header-container::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent-color);
 }
 
 /* Links sociales */
+.header .theme-toggle,
 .header .social-links {
     margin: 0 0 10px 0;
-    .header .social-links {
-        margin: 0 0 10px 0;
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-    }
-    
+    display: flex;
+    justify-content: center;
+    gap: 6px;
 }
+
+.header .theme-toggle a,
 .header .social-links a {
     font-size: 16px;
     display: inline-flex;
@@ -142,6 +142,7 @@
     height: 40px;
     transition: 0.3s;
 }
+.header .theme-toggle a:hover,
 .header .social-links a:hover {
     color: var(--contrast-color);
     background: var(--accent-color);
@@ -165,6 +166,7 @@
     z-index: 9999;
     transition: background-color 0.3s;
 }
+
 .header-toggle:hover {
     background-color: var(--color-mix-header-container-2);
 }
@@ -195,13 +197,9 @@
         box-sizing: border-box;
     }
 
-    .header-toggle {
-        display: none;
-    }
+    .header-toggle { display: none; }
 
-    .header~main {
-        margin-left: 330px;
-    }
+    .header~main { margin-left: 330px; }
 
     .header.header-closed,
     .header.header-hint {
@@ -215,22 +213,18 @@
         overflow-x: hidden;
         scrollbar-gutter: stable;
         scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        scrollbar-color: rgba(255,255,255,0.3) transparent;
     }
 
-    .header .header-container::-webkit-scrollbar {
-        width: 6px;
-    }
-    .header .header-container::-webkit-scrollbar-track {
-        background: transparent;
-    }
+    .header .header-container::-webkit-scrollbar { width: 6px; }
+    .header .header-container::-webkit-scrollbar-track { background: transparent; }
     .header .header-container::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0);
+        background-color: rgba(255,255,255,0);
         border-radius: 10px;
         transition: background-color 0.3s;
     }
     .header .header-container:hover::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: rgba(255,255,255,0.3);
     }
     .header .header-container::-webkit-scrollbar-thumb:hover {
         background-color: var(--accent-color);
@@ -245,11 +239,13 @@
     z-index: 9997;
     width: 100%;
 }
+
 .navmenu ul {
     list-style: none;
     padding: 0 0 20px 0;
     margin: 0;
 }
+
 .navmenu a,
 .navmenu a:focus,
 .navmenu .dropdown a,
@@ -266,19 +262,15 @@
     background-color: transparent;
     transition: color 0.3s, background-color 0.3s;
 }
-.navmenu a .navicon {
-    font-size: 20px;
-    margin-right: 10px;
-}
+
+.navmenu a .navicon { font-size: 20px; margin-right: 10px; }
+
 .navmenu a:hover,
-.navmenu .dropdown a:hover {
-    color: var(--nav-hover-color);
-}
+.navmenu .dropdown a:hover { color: var(--nav-hover-color); }
+
 .navmenu a.active,
-.navmenu .dropdown a.active {
-    color: var(--accent-color);
-    background-color: transparent;
-}
+.navmenu .dropdown a.active { color: var(--accent-color); background-color: transparent; }
+
 .navmenu a .toggle-dropdown {
     font-size: 12px;
     line-height: 0;
@@ -293,18 +285,17 @@
     background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
     transition: background-color 0.3s, transform 0.3s;
 }
+
 .navmenu a .toggle-dropdown:hover {
     background-color: var(--accent-color);
     color: var(--contrast-color);
 }
 
 /* Dropdowns activos */
-.navmenu li.dropdown.active>a {
-    color: var(--accent-color);
-}
-.navmenu li.dropdown>a>.toggle-dropdown {
-    transform: rotate(0deg);
-}
+.navmenu li.dropdown.active>a { color: var(--accent-color); }
+
+.navmenu li.dropdown>a>.toggle-dropdown { transform: rotate(0deg); }
+
 .navmenu li.dropdown.active>a>.toggle-dropdown {
     transform: rotate(180deg);
     background-color: var(--accent-color);
@@ -322,26 +313,15 @@
     border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
     display: none;
 }
-.navmenu .dropdown ul ul {
-    background-color: rgba(33, 37, 41, 0.1);
+
+.navmenu .dropdown ul ul { background-color: rgba(33,37,41,0.1); }
+
+.navmenu .dropdown>.dropdown-active { display: block; opacity: 1; padding: 5px 10px; }
+
+.navmenu li.dropdown.active>ul { max-height: 1000px; opacity: 1; padding: 5px 10px; background-color: var(--color-mix-header-container-3);     border: 1px solid color-mix(in srgb, var(--accent-color), transparent 90%);
 }
-.navmenu .dropdown>.dropdown-active {
-    display: block;
-    opacity: 1;
-    padding: 5px 10px;
-}
-.navmenu li.dropdown.active>ul {
-    max-height: 1000px;
-    opacity: 1;
-    padding: 5px 10px;
-    background-color: var(--color-mix-header-container-3);
-}
-.navmenu li.dropdown.active>ul>li.dropdown.active>ul {
-    max-height: 1000px;
-    opacity: 1;
-    padding: 5px 10px;
-    background-color: var(--color-mix-header-container-4);
-}
+
+.navmenu li.dropdown.active>ul>li.dropdown.active>ul { max-height: 1000px; opacity: 1; padding: 5px 10px; background-color: var(--color-mix-header-container-4); }
 
 /*==============================================================
 # GLOBAL FOOTER
@@ -353,13 +333,14 @@
     padding: 0 0 40px 0;
     position: relative;
 }
+
 .footer .copyright {
     padding-top: 40px;
     border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
 }
-.footer .copyright p {
-    margin-bottom: 0;
-}
+
+.footer .copyright p { margin-bottom: 0; }
+
 .footer .credits {
     margin-top: 4px;
     font-size: 13px;

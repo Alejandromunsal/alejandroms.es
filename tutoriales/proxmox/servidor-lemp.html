@@ -68,7 +68,6 @@
 
 <body class="service-details-page">
 
-  <body class="index-page">
 
     <!-- Justo dentro del body, pero fuera del header -->
     <div class="swipe-area"></div>
@@ -115,6 +114,8 @@
           <a href="https://github.com/Alejandromunsal" target="_blank" class="github" rel="noopener noreferrer"
             aria-label="github">
             <i class="bi bi-github"></i></a>
+          <a id="toggle-theme" class="theme-toggle"><i class="bi bi-sun-fill"></i></a>
+
         </div>
 
       </div>
@@ -132,11 +133,12 @@
       <div class="page-title dark-background">
         <div class="container d-lg-flex justify-content-between align-items-center">
           <h1 class="mb-2 mb-lg-0">Servidor Lemp | Debian 12 | LXC Proxmox</h1>
+          
           <nav class="breadcrumbs">
             <ol>
               <li><a href="/services.html">Tutoriales</a></li>
               <li><a href="/services.html">Proxmox</a></li>
-              <li class="current">Lemp</li>
+              <li><a href="#">Lemp</a></li>
             </ol>
           </nav>
         </div>
@@ -150,6 +152,7 @@
           <div class="row gy-4">
 
             <div class="col-lg-8">
+
               <div class="service-details-slider swiper init-swiper">
                 <script type="application/json" class="swiper-config">
                 {
@@ -318,12 +321,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js" defer></script>
     <!-- JS para cargar Markdown -->
     <script src="/assets/js/load-markdown.js" defer></script>
-    <!-- Llamada a la función -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        loadMarkdown('/content/tutorials/lemp.md', 'md-content', 'md-date');
-      });
-    </script>
 
     <!-- Main JS File -->
     <script src="/assets/js/main.js?v=1" defer></script>

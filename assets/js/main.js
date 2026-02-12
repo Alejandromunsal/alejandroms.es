@@ -1,104 +1,79 @@
 /**
- * Updated: Feb 10 2026 with Bootstrap v5.3.7
+ * Updated: Feb 11 2026 with Bootstrap v5.3.7
  * Author: Alejandro Muñoz Salas
  */
-
 (function () {
   "use strict";
 
   const header = document.getElementById('header');
   const headerToggleBtn = document.querySelector('.header-toggle');
   const swipeArea = document.querySelector('.swipe-area');
+  const swipeHint = document.querySelector('.swipe-hint');
 
-  if (!header || !headerToggleBtn || !swipeArea) return;
+  if (!header || !headerToggleBtn) return;
 
-  const headerWidth = header.offsetWidth;
-  let startX = 0, currentX = 0, isDragging = false;
+  let headerWidth = header.offsetWidth;
+  window.addEventListener('resize', () => { headerWidth = header.offsetWidth; updateSwipeArea(); });
 
   /* ===============================
      Swipe hint (móvil)
   =============================== */
-  const hint = document.querySelector('.swipe-hint');
   let hintTimeout;
-
   function showSwipeHint() {
-    if (window.innerWidth > 1199) return;
-    if (header.classList.contains('header-show')) return;
-    hint?.classList.add('active');
+    if (window.innerWidth > 1199 || header.classList.contains('header-show')) return;
+    swipeHint?.classList.add('active');
     clearTimeout(hintTimeout);
-    hintTimeout = setTimeout(() => hint?.classList.remove('active'), 4500);
+    hintTimeout = setTimeout(() => swipeHint?.classList.remove('active'), 4500);
   }
 
-  function hideSwipeHint() {
-    header.classList.remove('header-closed');
-  }
+  function addSwipeHint() { header.classList.add('header-closed'); }
+  function removeSwipeHint() { header.classList.remove('header-closed'); }
 
-  function addSwipeHint() {
-    header.classList.add('header-closed');
-  }
-
-  /* ===============================
-     Actualizar swipe-area según header
-  =============================== */
   function updateSwipeArea() {
-    if (window.innerWidth >= 1200) return;
-    swipeArea.style.pointerEvents = header.classList.contains('header-show') ? 'none' : 'auto';
+    if (window.innerWidth >= 1200) {
+      header.classList.remove('header-closed');
+      if (swipeArea) swipeArea.style.pointerEvents = 'none';
+      return;
+    }
+    if (swipeArea) swipeArea.style.pointerEvents = header.classList.contains('header-show') ? 'none' : 'auto';
   }
 
   updateSwipeArea();
+  if (!header.classList.contains('header-show')) showSwipeHint();
 
   /* ===============================
      Abrir/Cerrar header
   =============================== */
-  function openHeaderSmooth() {
-    header.style.transition = 'transform 0.3s ease';
-    header.style.transform = 'translateX(0)';
+  function openHeader() {
     header.classList.add('header-show');
-    headerToggleBtn.classList.remove('bi-list');
-    headerToggleBtn.classList.add('bi-x');
-    hideSwipeHint();
+    headerToggleBtn.classList.replace('bi-list', 'bi-x');
+    header.classList.remove('header-closed');
+    swipeHint?.classList.remove('active');
+    removeSwipeHint();
     updateSwipeArea();
-    header.addEventListener('transitionend', () => {
-      header.style.transition = '';
-      header.style.transform = '';
-    }, { once: true });
   }
 
-  function closeHeaderSmooth() {
-    header.style.transition = 'transform 0.3s ease';
-    header.style.transform = 'translateX(-100%)';
+  function closeHeader() {
     header.classList.remove('header-show');
-    headerToggleBtn.classList.add('bi-list');
-    headerToggleBtn.classList.remove('bi-x');
+    headerToggleBtn.classList.replace('bi-x', 'bi-list');
     addSwipeHint();
     showSwipeHint();
     updateSwipeArea();
-    header.addEventListener('transitionend', () => {
-      header.style.transition = '';
-      header.style.transform = '';
-    }, { once: true });
   }
 
   function headerToggle(forceClose = false) {
-    if (forceClose || header.classList.contains('header-show')) closeHeaderSmooth();
-    else openHeaderSmooth();
+    if (forceClose || header.classList.contains('header-show')) closeHeader();
+    else openHeader();
   }
 
-  headerToggleBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    headerToggle();
-  });
-
+  headerToggleBtn.addEventListener('click', e => { e.stopPropagation(); headerToggle(); });
   header.addEventListener('click', e => e.stopPropagation());
 
-  /* ===============================
-     Click fuera para cerrar header
-  =============================== */
   document.addEventListener('click', e => {
     if (window.innerWidth >= 1200) return;
     if (header.classList.contains('header-show') &&
-      !header.contains(e.target) &&
-      !headerToggleBtn.contains(e.target)) {
+        !header.contains(e.target) &&
+        !headerToggleBtn.contains(e.target)) {
       headerToggle(true);
     }
   });
@@ -106,13 +81,13 @@
   /* ===============================
      Swipe progresivo (móvil)
   =============================== */
+  let startX = 0, currentX = 0, isDragging = false;
+
   function onTouchStart(e) {
     if (window.innerWidth >= 1200) return;
     startX = e.touches[0].clientX;
     currentX = startX;
-
-    if ((!header.classList.contains('header-show') && e.target.closest('.swipe-area')) ||
-      header.classList.contains('header-show')) {
+    if ((!header.classList.contains('header-show') && e.target.closest('.swipe-area')) || header.classList.contains('header-show')) {
       isDragging = true;
       header.style.transition = 'none';
     }
@@ -136,55 +111,40 @@
   function onTouchEnd() {
     if (!isDragging) return;
     isDragging = false;
-
+    header.style.transition = '';
+    header.style.transform = '';
     const deltaX = currentX - startX;
     const threshold = headerWidth / 4;
-
-    if (header.classList.contains('header-show')) {
-      deltaX < -threshold ? closeHeaderSmooth() : openHeaderSmooth();
-    } else {
-      deltaX > threshold ? openHeaderSmooth() : closeHeaderSmooth();
-    }
+    if (header.classList.contains('header-show')) deltaX < -threshold ? closeHeader() : openHeader();
+    else deltaX > threshold ? openHeader() : closeHeader();
   }
 
   document.addEventListener('touchstart', onTouchStart);
   document.addEventListener('touchmove', onTouchMove);
   document.addEventListener('touchend', onTouchEnd);
 
-  // Mostrar hint al cargar si está cerrado
-  if (!header.classList.contains('header-show')) showSwipeHint();
-
   /* ===============================
      Cerrar nav móvil al hacer click en link
   =============================== */
   document.querySelectorAll('#navmenu a').forEach(link => {
     link.addEventListener('click', () => {
-      if (window.innerWidth < 1200 && header.classList.contains('header-show')) {
-        closeHeaderSmooth();
-      }
+      if (window.innerWidth < 1200 && header.classList.contains('header-show')) closeHeader();
     });
   });
 
   /* ===============================
-     Dropdowns multinivel (transición suave)
+     Dropdowns multinivel
   =============================== */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(toggle => {
-    toggle.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const li = this.closest('li.dropdown');
+    toggle.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const li = toggle.closest('li.dropdown');
       if (!li) return;
-
       const submenu = li.querySelector(':scope > ul');
       if (!submenu) return;
-
-      // Cerrar otros menús hermanos
       li.parentNode.querySelectorAll(':scope > li.dropdown.active')
         .forEach(sibling => { if (sibling !== li) closeDropdown(sibling); });
-
-      // Alternar este menú
-      li.classList.contains('active') ? closeDropdown(li) : openDropdown(li, submenu, this);
+      li.classList.contains('active') ? closeDropdown(li) : openDropdown(li, submenu, toggle);
     });
   });
 
@@ -200,9 +160,7 @@
     menu.style.opacity = 1;
     if (arrow) arrow.style.transform = 'rotate(180deg)';
     menu.addEventListener('transitionend', function cleanup() {
-      menu.style.height = '';
-      menu.style.transition = '';
-      menu.removeEventListener('transitionend', cleanup);
+      menu.style.height = ''; menu.style.transition = ''; menu.removeEventListener('transitionend', cleanup);
     });
   }
 
@@ -237,14 +195,8 @@
      Scroll top button
   =============================== */
   const scrollTop = document.querySelector('.scroll-top');
-  function toggleScrollTop() {
-    if (!scrollTop) return;
-    scrollTop.classList.toggle('active', window.scrollY > 100);
-  }
-  scrollTop?.addEventListener('click', e => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  function toggleScrollTop() { scrollTop?.classList.toggle('active', window.scrollY > 100); }
+  scrollTop?.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);
 
@@ -252,21 +204,16 @@
      AOS
   =============================== */
   window.addEventListener('load', () => {
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    });
+    if (window.AOS) AOS.init({ duration: 600, easing: 'ease-in-out', once: true, mirror: false });
   });
 
   /* ===============================
      Typed.js
   =============================== */
-  const selectTyped = document.querySelector('.typed');
-  if (selectTyped) {
+  const typedEl = document.querySelector('.typed');
+  if (typedEl && window.Typed) {
     new Typed('.typed', {
-      strings: selectTyped.getAttribute('data-typed-items').split(','),
+      strings: typedEl.getAttribute('data-typed-items').split(','),
       loop: true,
       typeSpeed: 100,
       backSpeed: 50,
@@ -277,19 +224,17 @@
   /* ===============================
      PureCounter
   =============================== */
-  new PureCounter();
+  if (window.PureCounter) new PureCounter();
 
   /* ===============================
      Skills animation
   =============================== */
   document.querySelectorAll('.skills-animation').forEach(item => {
-    new Waypoint({
+    if (window.Waypoint) new Waypoint({
       element: item,
       offset: '80%',
       handler: function () {
-        item.querySelectorAll('.progress-bar').forEach(el => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%';
-        });
+        item.querySelectorAll('.progress-bar').forEach(el => el.style.width = el.getAttribute('aria-valuenow') + '%');
       }
     });
   });
@@ -297,32 +242,24 @@
   /* ===============================
      GLightbox
   =============================== */
-  GLightbox({ selector: '.glightbox' });
+  if (window.GLightbox) GLightbox({ selector: '.glightbox' });
 
   /* ===============================
      Auto-open dropdowns by URL
   =============================== */
-  function normalizePath(path) {
-    return path.replace(window.location.origin, '')
-      .replace(/index\.html$/, '')
-      .replace(/\.html$/, '')
-      .replace(/\/$/, '');
-  }
+  function normalizePath(path) { return path.replace(window.location.origin, '').replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, ''); }
 
   function openMenuByCurrentURL() {
     const currentPath = normalizePath(window.location.pathname);
-    const links = document.querySelectorAll('#navmenu a[href]');
-    links.forEach(link => {
+    document.querySelectorAll('#navmenu a[href]').forEach(link => {
       const href = link.getAttribute('href');
       if (!href || href === '#') return;
-      const linkPath = normalizePath(href);
-      if (currentPath.includes(linkPath)) {
+      if (currentPath.includes(normalizePath(href))) {
         link.classList.add('active');
         let parent = link.closest('li.dropdown');
         while (parent) {
           parent.classList.add('active');
-          const submenu = parent.querySelector(':scope > .dropdown-menu');
-          submenu?.classList.add('dropdown-active');
+          parent.querySelector(':scope > ul')?.classList.add('dropdown-active');
           const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
           if (arrow) arrow.style.transform = 'rotate(180deg)';
           parent = parent.parentElement.closest('li.dropdown');
@@ -330,29 +267,45 @@
       }
     });
   }
-
   window.addEventListener('load', openMenuByCurrentURL);
 
-  /* ===============================
-   Dark / Light
+/* ===============================
+   Dark / Light Theme con sincronización entre pestañas
 =============================== */
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggleThemeBtn = document.getElementById('toggle-theme');
-    if (!toggleThemeBtn) return;
+const toggleThemeBtn = document.getElementById('toggle-theme');
 
-    // Aplicar tema guardado al cargar
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
+function applyTheme(mode) {
+  if (mode === 'light') document.body.classList.add('light-mode');
+  else document.body.classList.remove('light-mode');
+  updateThemeButton();
+}
 
-    // Alternar tema al hacer clic
-    toggleThemeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const mode = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-      localStorage.setItem('theme', mode);
-    });
+function updateThemeButton() {
+  if (!toggleThemeBtn) return;
+  toggleThemeBtn.innerHTML = document.body.classList.contains('light-mode')
+    ? '<i class="bi bi-moon-fill"></i>'
+    : '<i class="bi bi-sun-fill"></i>';
+}
+
+// Aplicar tema guardado al cargar la página
+const savedTheme = localStorage.getItem('theme') || 'dark';
+applyTheme(savedTheme);
+
+// Cambiar tema al hacer click
+if (toggleThemeBtn) {
+  toggleThemeBtn.addEventListener('click', () => {
+    const newMode = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+    localStorage.setItem('theme', newMode);
+    applyTheme(newMode);
   });
+}
 
+// Escuchar cambios en otras pestañas y aplicarlos automáticamente
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') {
+    applyTheme(e.newValue);
+  }
+});
 
 
 })();

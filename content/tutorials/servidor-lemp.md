@@ -1,10 +1,12 @@
+# Servidor LEMP en Debian 12 en LXC (Proxmox) prueba
 
----
+## Introducción
 
-# Servidor LEMP en Debian 12 en LXC (Proxmox)       
+La pila de software LEMP es un conjunto de herramientas utilizadas para alojar y servir aplicaciones y sitios web dinámicos. Su nombre proviene de las iniciales de sus componentes principales: Linux como sistema operativo, Nginx como servidor web (la “E” proviene de la pronunciación de Nginx), MariaDB como sistema de gestión de bases de datos y PHP para procesar el contenido dinámico del lado del servidor.
 
+Aunque tradicionalmente muchas implementaciones empleaban MySQL como motor de base de datos, distribuciones como Debian optan por MariaDB, una alternativa totalmente compatible que actúa como reemplazo directo y mantiene la misma funcionalidad.
 
-En este tutorial aprenderás a instalar y configurar un servidor **LEMP** (Linux, Nginx, MySQL/MariaDB y PHP) paso a paso, listo para producción.
+En esta guía aprenderás a configurar una pila LEMP (Linux, Nginx, MySQL/MariaDB y PHP) en un servidor con Debian 12, utilizando MariaDB para la gestión de datos y dejando listo el entorno para ejecutar aplicaciones web modernas de forma estable y eficiente.
 
 ---
 

@@ -19,12 +19,15 @@
   --surface-color: #232323; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #310606; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
   --header-color: color-mix(in srgb, var(--default-color), transparent 80%);
+  --header-border-right:var(--header-color);
   --color-mix-header-container-1: color-mix(in srgb, var(--background-color), white 4%);
   --color-mix-header-container-2: color-mix(in srgb, var(--accent-color) 90%, white 15%);
   --color-mix-header-container-3: color-mix(in srgb, var(--background-color), white 5%);
   --color-mix-header-container-4: color-mix(in srgb, var(--background-color), white 10%);
   --social-link-color: color-mix(in srgb, var(--default-color), transparent 90%);
   --stats-background-color: linear-gradient(135deg, color-mix(in srgb, var(--surface-color), transparent 5%), var(--surface-color));
+  --scroll-bar-color: #ececec;
+  --md-box-color: var(--default-color);
 }
 
 :root {
@@ -47,29 +50,32 @@ body.light-mode {
   --background-color: #f5f5f5; /* Fondo general muy claro */
   --default-color: #1f1f1f; /* Color de texto principal (oscuro) */
   --heading-color: #111111; /* Encabezados más oscuros que el texto normal */
-  --accent-color: #ff6600; /* Color de acento, se puede mantener o cambiar */
+  --accent-color: #D4A017; /* Color de acento, se puede mantener o cambiar */
   --surface-color: #ffffff; /* Fondo de tarjetas, cajas y secciones */
   --contrast-color: #ececec; /* Color de contraste para elementos sobre acentos */
   --header-color: color-mix(in srgb, var(--default-color), transparent 80%);
+  --header-border-right: color-mix(in srgb, var(--accent-color), transparent 50%);
   --color-mix-header-container-1: #ffffff;
   --color-mix-header-container-2: color-mix(in srgb, var(--accent-color) 90%, black 15%);
   --color-mix-header-container-3: color-mix(in srgb, var(--background-color), black 5%);
   --color-mix-header-container-4: color-mix(in srgb, var(--background-color), black 10%);
   --social-link-color: color-mix(in srgb, var(--accent-color), transparent 50%);
   --stats-background-color: linear-gradient(135deg, color-mix(in srgb, var(--surface-color), transparent 5%), var(--surface-color));
+  --scroll-bar-color: #1f1f1f;
+  --md-box-color: #ffffff;
 }
 body.light-mode body.light-mode {
-  --section-alt-bg: #ff6600;
+  --section-alt-bg: #D4A017;
   --section-alt-surface: #ececec;
 }
 body.light-mode {
   /* Nav Menu Colors */
   --nav-color: rgba(31, 31, 31, 0.7); /* Links normales en nav (oscuro semi-transparente) */
-  --nav-hover-color: #ff6600; /* Links al pasar hover */
+  --nav-hover-color: #D4A017; /* Links al pasar hover */
   --nav-mobile-background-color: #e6e6e6; /* Fondo menú móvil */
   --nav-dropdown-background-color: #f0f0f0; /* Fondo dropdown */
   --nav-dropdown-color: #1f1f1f; /* Texto dropdown */
-  --nav-dropdown-hover-color: #ff6600; /* Hover dropdown (acento) */
+  --nav-dropdown-hover-color: #D4A017; /* Hover dropdown (acento) */
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -81,7 +87,6 @@ body.light-mode {
 .dark-background {
   --background-color: #040b14;
   --default-color: #ffffff;
-  --heading-color: #ffffff;
   --surface-color: #151f2b;
   --contrast-color: #ffffff;
 }
@@ -119,6 +124,18 @@ h5,
 h6 {
   color: var(--heading-color);
   font-family: var(--heading-font);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap; /* evita que se rompa la línea */
+  border: 0;
 }
 
 /* PHP Email Form Messages
@@ -263,6 +280,7 @@ h6 {
 .page-title h1 {
   font-size: 24px;
   font-weight: 700;
+  color: var(--heading-color); /* <- Esto asegura que cambie con el theme */
 }
 
 .page-title .breadcrumbs ol {
@@ -760,8 +778,7 @@ section,
   bottom: 0;
   width: 300px;
   z-index: 997;
-  /* cerrado por defecto en móviles */
-  transform: translateX(-100%);
+  transform: translateX(-98%);
   transition: transform 0.3s ease;
   will-change: transform;
 }
@@ -773,17 +790,16 @@ section,
 
 /* Hint lateral visible cuando cerrado */
 .header.header-closed {
-  transform: translateX(-99%);
+  transform: translateX(-98%);
   width: 300px;
   max-height: none;
-  background-color: transparent;
-  border-left: 4px solid var(--accent-color);
   background: linear-gradient(to right, var(--accent-color) 4px, transparent 0);
+  border-left: 4px solid var(--accent-color);
 }
 
 /* Hint lateral más visible (para indicar swipe) */
 .header.header-hint {
-  transform: translateX(-90%);
+  transform: translateX(-98%);
   width: 300px;
   max-height: none;
   background-color: transparent;
@@ -795,7 +811,7 @@ section,
   padding: 15px;
   background-color: var(--color-mix-header-container-1);
   border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
-  border-right: 4px solid var(--header-color);
+  border-right: 4px solid var(--header-border-right);
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);
   max-height: calc(100vh - 30px);
   overflow-y: auto;
@@ -803,7 +819,7 @@ section,
   scroll-behavior: smooth;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--accent-color), transparent 65%) transparent;
+  scrollbar-color: color-mix(in srgb, var(--scroll-bar-color), transparent 65%) transparent;
 }
 
 /* Zona de swipe en móviles */
@@ -812,10 +828,10 @@ section,
     position: fixed;
     top: 0;
     left: 0;
-    width: 180px; /* ancho de la zona de swipe */
+    width: 180px;
     height: 100vh;
-    z-index: 9998; /* por encima del contenido pero debajo del toggle */
-    touch-action: pan-y; /* permite swipe horizontal sin bloquear scroll vertical */
+    z-index: 9998;
+    touch-action: pan-y;
   }
   .swipe-hint {
     position: fixed;
@@ -870,16 +886,15 @@ section,
 }
 
 /* Links sociales */
+.header .theme-toggle,
 .header .social-links {
-  margin: 0 0 10px 0;
-}
-.header .social-links .header .social-links {
   margin: 0 0 10px 0;
   display: flex;
   justify-content: center;
   gap: 6px;
 }
 
+.header .theme-toggle a,
 .header .social-links a {
   font-size: 16px;
   display: inline-flex;
@@ -894,6 +909,7 @@ section,
   transition: 0.3s;
 }
 
+.header .theme-toggle a:hover,
 .header .social-links a:hover {
   color: var(--contrast-color);
   background: var(--accent-color);
@@ -1093,6 +1109,7 @@ section,
   opacity: 1;
   padding: 5px 10px;
   background-color: var(--color-mix-header-container-3);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 90%);
 }
 
 .navmenu li.dropdown.active > ul > li.dropdown.active > ul {
@@ -2701,7 +2718,7 @@ section,
 --------------------------------------------------------------*/
 #md-content pre.markdown-code {
   position: relative;
-  background: var(--default-color);
+  background: var(--md-box-color);
   border-radius: 10px;
   padding: 2.2rem 1rem 1rem;
   /* padding-top suficiente para el nombre del lenguaje */
