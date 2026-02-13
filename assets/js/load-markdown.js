@@ -176,10 +176,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const containers = document.querySelectorAll(containerSelector);
   if (!containers.length) return;
 
-  // Tomar el nombre del HTML actual
-  let path = window.location.pathname.split('/').filter(Boolean);
-  let htmlFile = path[path.length - 1] || 'index.html'; 
-  let mdFile = htmlFile.replace(/\.html$/, '.md');
+  // =========================
+  // Detectar markdown desde URL
+  // =========================
+
+  let path = window.location.pathname;
+
+  // ejemplo:
+  // /tutoriales/proxmox/servidor-lemp
+  // -> proxmox/servidor-lemp.md
+
+  let mdFile = path
+    .replace(/^\/tutoriales\//, '') // quitar prefijo
+    .replace(/\/$/, '')             // quitar slash final
+    + '.md';
 
   loadMarkdown(mdFile, containerSelector, dateSelector, titleSelector);
 });

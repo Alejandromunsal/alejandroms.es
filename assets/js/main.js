@@ -1,5 +1,5 @@
 /**
- * Updated: Feb 11 2026 with Bootstrap v5.3.7
+ * Updated & Optimized: Feb 13 2026 with Bootstrap v5.3.7
  * Author: Alejandro Muñoz Salas
  */
 (function () {
@@ -9,6 +9,9 @@
   const headerToggleBtn = document.querySelector('.header-toggle');
   const swipeArea = document.querySelector('.swipe-area');
   const swipeHint = document.querySelector('.swipe-hint');
+  const scrollTop = document.querySelector('.scroll-top');
+  const toggleThemeBtn = document.getElementById('toggle-theme');
+  const preloader = document.querySelector('#preloader');
 
   if (!header || !headerToggleBtn) return;
 
@@ -16,74 +19,61 @@
   window.addEventListener('resize', () => { headerWidth = header.offsetWidth; updateSwipeArea(); });
 
   /* ===============================
-     Swipe hint (móvil)
+     Swipe hint & mobile swipe
   =============================== */
-  let hintTimeout;
-  function showSwipeHint() {
+  let hintTimeout, startX = 0, currentX = 0, isDragging = false;
+
+  const showSwipeHint = () => {
     if (window.innerWidth > 1199 || header.classList.contains('header-show')) return;
     swipeHint?.classList.add('active');
     clearTimeout(hintTimeout);
     hintTimeout = setTimeout(() => swipeHint?.classList.remove('active'), 4500);
-  }
+  };
 
-  function addSwipeHint() { header.classList.add('header-closed'); }
-  function removeSwipeHint() { header.classList.remove('header-closed'); }
+  const addSwipeHint = () => header.classList.add('header-closed');
+  const removeSwipeHint = () => header.classList.remove('header-closed');
 
-  function updateSwipeArea() {
+  const updateSwipeArea = () => {
     if (window.innerWidth >= 1200) {
       header.classList.remove('header-closed');
       if (swipeArea) swipeArea.style.pointerEvents = 'none';
       return;
     }
     if (swipeArea) swipeArea.style.pointerEvents = header.classList.contains('header-show') ? 'none' : 'auto';
-  }
+  };
 
   updateSwipeArea();
   if (!header.classList.contains('header-show')) showSwipeHint();
 
-  /* ===============================
-     Abrir/Cerrar header
-  =============================== */
-  function openHeader() {
+  const openHeader = () => {
     header.classList.add('header-show');
     headerToggleBtn.classList.replace('bi-list', 'bi-x');
     header.classList.remove('header-closed');
     swipeHint?.classList.remove('active');
     removeSwipeHint();
     updateSwipeArea();
-  }
+  };
 
-  function closeHeader() {
+  const closeHeader = () => {
     header.classList.remove('header-show');
     headerToggleBtn.classList.replace('bi-x', 'bi-list');
     addSwipeHint();
     showSwipeHint();
     updateSwipeArea();
-  }
+  };
 
-  function headerToggle(forceClose = false) {
-    if (forceClose || header.classList.contains('header-show')) closeHeader();
-    else openHeader();
-  }
+  const headerToggle = (forceClose = false) => forceClose || header.classList.contains('header-show') ? closeHeader() : openHeader();
 
   headerToggleBtn.addEventListener('click', e => { e.stopPropagation(); headerToggle(); });
   header.addEventListener('click', e => e.stopPropagation());
-
   document.addEventListener('click', e => {
     if (window.innerWidth >= 1200) return;
     if (header.classList.contains('header-show') &&
         !header.contains(e.target) &&
-        !headerToggleBtn.contains(e.target)) {
-      headerToggle(true);
-    }
+        !headerToggleBtn.contains(e.target)) headerToggle(true);
   });
 
-  /* ===============================
-     Swipe progresivo (móvil)
-  =============================== */
-  let startX = 0, currentX = 0, isDragging = false;
-
-  function onTouchStart(e) {
+  const onTouchStart = (e) => {
     if (window.innerWidth >= 1200) return;
     startX = e.touches[0].clientX;
     currentX = startX;
@@ -91,13 +81,12 @@
       isDragging = true;
       header.style.transition = 'none';
     }
-  }
+  };
 
-  function onTouchMove(e) {
+  const onTouchMove = (e) => {
     if (!isDragging) return;
     currentX = e.touches[0].clientX;
     let deltaX = currentX - startX;
-
     if (header.classList.contains('header-show')) {
       deltaX = Math.min(0, deltaX);
       header.style.transform = `translateX(${deltaX}px)`;
@@ -106,25 +95,25 @@
       deltaX = Math.min(deltaX, headerWidth);
       header.style.transform = `translateX(${deltaX - headerWidth}px)`;
     }
-  }
+  };
 
-  function onTouchEnd() {
+  const onTouchEnd = () => {
     if (!isDragging) return;
     isDragging = false;
     header.style.transition = '';
     header.style.transform = '';
     const deltaX = currentX - startX;
     const threshold = headerWidth / 4;
-    if (header.classList.contains('header-show')) deltaX < -threshold ? closeHeader() : openHeader();
-    else deltaX > threshold ? openHeader() : closeHeader();
-  }
+    header.classList.contains('header-show') ? (deltaX < -threshold ? closeHeader() : openHeader())
+                                           : (deltaX > threshold ? openHeader() : closeHeader());
+  };
 
   document.addEventListener('touchstart', onTouchStart);
   document.addEventListener('touchmove', onTouchMove);
   document.addEventListener('touchend', onTouchEnd);
 
   /* ===============================
-     Cerrar nav móvil al hacer click en link
+     Close nav on mobile link click
   =============================== */
   document.querySelectorAll('#navmenu a').forEach(link => {
     link.addEventListener('click', () => {
@@ -135,36 +124,25 @@
   /* ===============================
      Dropdowns multinivel
   =============================== */
-  document.querySelectorAll('.navmenu .toggle-dropdown').forEach(toggle => {
-    toggle.addEventListener('click', e => {
-      e.preventDefault(); e.stopPropagation();
-      const li = toggle.closest('li.dropdown');
-      if (!li) return;
-      const submenu = li.querySelector(':scope > ul');
-      if (!submenu) return;
-      li.parentNode.querySelectorAll(':scope > li.dropdown.active')
-        .forEach(sibling => { if (sibling !== li) closeDropdown(sibling); });
-      li.classList.contains('active') ? closeDropdown(li) : openDropdown(li, submenu, toggle);
-    });
-  });
-
-  function openDropdown(li, menu, arrow) {
+  const openDropdown = (li, menu, arrow) => {
     li.classList.add('active');
     menu.style.display = 'block';
-    const height = menu.scrollHeight + 'px';
     menu.style.height = '0px';
     menu.style.opacity = 0;
+    const height = menu.scrollHeight + 'px';
     menu.offsetHeight;
     menu.style.transition = 'height 0.3s ease, opacity 0.3s ease';
     menu.style.height = height;
     menu.style.opacity = 1;
     if (arrow) arrow.style.transform = 'rotate(180deg)';
     menu.addEventListener('transitionend', function cleanup() {
-      menu.style.height = ''; menu.style.transition = ''; menu.removeEventListener('transitionend', cleanup);
+      menu.style.height = '';
+      menu.style.transition = '';
+      menu.removeEventListener('transitionend', cleanup);
     });
-  }
+  };
 
-  function closeDropdown(li) {
+  const closeDropdown = (li) => {
     li.classList.remove('active');
     const menu = li.querySelector(':scope > ul');
     const arrow = li.querySelector(':scope > a > .toggle-dropdown');
@@ -183,19 +161,29 @@
       menu.removeEventListener('transitionend', cleanup);
     });
     li.querySelectorAll('li.dropdown.active').forEach(child => closeDropdown(child));
-  }
+  };
+
+  document.querySelectorAll('.navmenu .toggle-dropdown').forEach(toggle => {
+    toggle.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const li = toggle.closest('li.dropdown');
+      if (!li) return;
+      const submenu = li.querySelector(':scope > ul');
+      if (!submenu) return;
+      li.parentNode.querySelectorAll(':scope > li.dropdown.active').forEach(s => { if (s !== li) closeDropdown(s); });
+      li.classList.contains('active') ? closeDropdown(li) : openDropdown(li, submenu, toggle);
+    });
+  });
 
   /* ===============================
      Preloader
   =============================== */
-  const preloader = document.querySelector('#preloader');
   if (preloader) window.addEventListener('load', () => preloader.remove());
 
   /* ===============================
      Scroll top button
   =============================== */
-  const scrollTop = document.querySelector('.scroll-top');
-  function toggleScrollTop() { scrollTop?.classList.toggle('active', window.scrollY > 100); }
+  const toggleScrollTop = () => scrollTop?.classList.toggle('active', window.scrollY > 100);
   scrollTop?.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);
@@ -203,23 +191,19 @@
   /* ===============================
      AOS
   =============================== */
-  window.addEventListener('load', () => {
-    if (window.AOS) AOS.init({ duration: 600, easing: 'ease-in-out', once: true, mirror: false });
-  });
+  window.addEventListener('load', () => { if (window.AOS) AOS.init({ duration: 600, easing: 'ease-in-out', once: true, mirror: false }); });
 
   /* ===============================
      Typed.js
   =============================== */
   const typedEl = document.querySelector('.typed');
-  if (typedEl && window.Typed) {
-    new Typed('.typed', {
-      strings: typedEl.getAttribute('data-typed-items').split(','),
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
-    });
-  }
+  if (typedEl && window.Typed) new Typed('.typed', {
+    strings: typedEl.getAttribute('data-typed-items').split(','),
+    loop: true,
+    typeSpeed: 100,
+    backSpeed: 50,
+    backDelay: 2000
+  });
 
   /* ===============================
      PureCounter
@@ -233,9 +217,7 @@
     if (window.Waypoint) new Waypoint({
       element: item,
       offset: '80%',
-      handler: function () {
-        item.querySelectorAll('.progress-bar').forEach(el => el.style.width = el.getAttribute('aria-valuenow') + '%');
-      }
+      handler: () => item.querySelectorAll('.progress-bar').forEach(el => el.style.width = el.getAttribute('aria-valuenow') + '%')
     });
   });
 
@@ -244,88 +226,137 @@
   =============================== */
   if (window.GLightbox) GLightbox({ selector: '.glightbox' });
 
-/* ===============================
-   Auto-open dropdowns by URL (mejorado)
-=============================== */
-function normalizePath(path) {
-  // Elimina el dominio, index.html, .html y barra final
-  let p = path.replace(window.location.origin, '')
-              .replace(/index\.html$/, '')
-              .replace(/\.html$/, '')
-              .replace(/\/$/, '');
-  // La ruta raíz será ''
-  return p || '/';
-}
+  /* ===============================
+     Dark / Light Theme
+  =============================== */
+  const applyTheme = (mode) => {
+    if (mode === 'light') document.body.classList.add('light-mode');
+    else document.body.classList.remove('light-mode');
+    updateThemeButton();
+  };
 
-function openMenuByCurrentURL() {
-  const currentPath = normalizePath(window.location.pathname);
+  const updateThemeButton = () => {
+    if (!toggleThemeBtn) return;
+    toggleThemeBtn.innerHTML = document.body.classList.contains('light-mode')
+      ? '<i class="bi bi-moon-fill"></i>'
+      : '<i class="bi bi-sun-fill"></i>';
+  };
 
-  document.querySelectorAll('#navmenu a[href]').forEach(link => {
-    const href = link.getAttribute('href');
-    if (!href || href === '#') return;
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  applyTheme(savedTheme);
 
-    const linkPath = normalizePath(href);
-
-    // Comparación exacta
-    if (currentPath === linkPath) {
-      link.classList.add('active');
-
-      // Abrir padres de dropdown
-      let parent = link.closest('li.dropdown');
-      while (parent) {
-        parent.classList.add('active');
-        const submenu = parent.querySelector(':scope > ul');
-        if (submenu) submenu.classList.add('dropdown-active');
-
-        const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
-        if (arrow) arrow.style.transform = 'rotate(180deg)';
-
-        parent = parent.parentElement.closest('li.dropdown');
-      }
-    }
-  });
-}
-
-window.addEventListener('load', openMenuByCurrentURL);
-
-
-/* ===============================
-   Dark / Light Theme con sincronización entre pestañas
-=============================== */
-const toggleThemeBtn = document.getElementById('toggle-theme');
-
-function applyTheme(mode) {
-  if (mode === 'light') document.body.classList.add('light-mode');
-  else document.body.classList.remove('light-mode');
-  updateThemeButton();
-}
-
-function updateThemeButton() {
-  if (!toggleThemeBtn) return;
-  toggleThemeBtn.innerHTML = document.body.classList.contains('light-mode')
-    ? '<i class="bi bi-moon-fill"></i>'
-    : '<i class="bi bi-sun-fill"></i>';
-}
-
-// Aplicar tema guardado al cargar la página
-const savedTheme = localStorage.getItem('theme') || 'dark';
-applyTheme(savedTheme);
-
-// Cambiar tema al hacer click
-if (toggleThemeBtn) {
-  toggleThemeBtn.addEventListener('click', () => {
-    const newMode = document.body.classList.contains('light-mode') ? 'dark' : 'light';
-    localStorage.setItem('theme', newMode);
-    applyTheme(newMode);
-  });
-}
-
-// Escuchar cambios en otras pestañas y aplicarlos automáticamente
-window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') {
-    applyTheme(e.newValue);
+  if (toggleThemeBtn) {
+    toggleThemeBtn.addEventListener('click', () => {
+      const newMode = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+      localStorage.setItem('theme', newMode);
+      applyTheme(newMode);
+    });
   }
-});
 
+  window.addEventListener('storage', e => { if (e.key === 'theme') applyTheme(e.newValue); });
+
+  /* ===============================
+     Auto-open dropdowns por URL
+  =============================== */
+  const normalizePath = (path) => {
+    let p = path.replace(window.location.origin, '').replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, '');
+    return p || '/';
+  };
+
+  const openMenuByCurrentURL = () => {
+    const currentPath = normalizePath(window.location.pathname);
+    document.querySelectorAll('#navmenu a[href]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+      const linkPath = normalizePath(href);
+      if (currentPath === linkPath) {
+        link.classList.add('active');
+        let parent = link.closest('li.dropdown');
+        while (parent) {
+          parent.classList.add('active');
+          const submenu = parent.querySelector(':scope > ul');
+          if (submenu) submenu.style.display = 'block';
+          const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
+          if (arrow) arrow.style.transform = 'rotate(180deg)';
+          parent = parent.parentElement.closest('li.dropdown');
+        }
+      }
+    });
+  };
+  window.addEventListener('load', openMenuByCurrentURL);
+
+  /* ===============================
+     Tutoriales dinámicos en header
+  =============================== */
+  const categoryIcons = {
+    proxmox: 'bi bi-server',
+    docker: 'bi bi-box',
+    linux: 'bi bi-terminal',
+    network: 'bi bi-wifi',
+    default: 'bi bi-hdd-stack'
+  };
+
+  const getIconClass = (category) => categoryIcons[category.toLowerCase()] || categoryIcons.default;
+
+  const createDropdown = (category, files) => {
+    const li = document.createElement('li');
+    li.classList.add('dropdown');
+    li.dataset.id = category;
+
+    li.innerHTML = `
+      <a href="#"><i class="${getIconClass(category)} navicon"></i> ${category.charAt(0).toUpperCase() + category.slice(1)}
+        <i class="bi bi-chevron-down toggle-dropdown"></i>
+      </a>
+      <ul class="dropdown-menu">
+        ${files.map(file => `
+          <li><a href="/tutoriales/${category}/${file}">
+            <i class="bi bi-file-earmark-text navicon"></i> ${file.replace(/-/g,' ')}
+          </a></li>
+        `).join('')}
+      </ul>
+    `;
+
+    const toggle = li.querySelector('.toggle-dropdown');
+    toggle?.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const submenu = li.querySelector(':scope > ul');
+      if (!submenu) return;
+      li.parentNode.querySelectorAll(':scope > li.dropdown.active').forEach(s => { if (s !== li) closeDropdown(s); });
+      const isActive = li.classList.toggle('active');
+      submenu.style.display = isActive ? 'block' : 'none';
+      toggle.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    return li;
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const menu = document.querySelector('#navmenu li[data-id="tutoriales"] > .dropdown-menu');
+    if (!menu) return;
+
+    fetch('/forms/get-md-dir-tree.php')
+      .then(res => res.json())
+      .then(data => {
+        Object.entries(data).forEach(([category, files]) => menu.appendChild(createDropdown(category, files)));
+
+        // Abrir automáticamente según URL
+        const currentPath = window.location.pathname.replace(window.location.origin, '').replace(/\/$/, '');
+        document.querySelectorAll('#navmenu li.dropdown a[href]').forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+            let parent = link.closest('li.dropdown');
+            while (parent) {
+              parent.classList.add('active');
+              const submenu = parent.querySelector(':scope > ul');
+              if (submenu) submenu.style.display = 'block';
+              const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
+              if (arrow) arrow.style.transform = 'rotate(180deg)';
+              parent = parent.parentElement.closest('li.dropdown');
+            }
+          }
+        });
+      })
+      .catch(err => console.error('Error cargando tutoriales dinámicos:', err));
+  });
 
 })();

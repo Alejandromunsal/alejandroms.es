@@ -52,6 +52,9 @@
     content="Portfolio profesional de Alejandro Muñoz Salas, Ingeniero de Computadores por la Universidad de Sevilla. Proyectos web, desarrollo y tutoriales.">
   <meta name="twitter:image" content="https://alejandroms.es/assets/img/og/og-image.jpg">
 
+  <!-- highlight.js para resaltar código -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+
   <!-- Robots -->
   <meta name="robots" content="index, follow">
 
@@ -79,18 +82,16 @@
           <li><a href="/portfolio.html"><i class="bi bi-images navicon"></i>Portfolio</a></li>
 
           <li class="dropdown" data-id="tutoriales">
-            <a href="/tutoriales/services.html"><i class="bi bi-hdd-stack navicon"></i>Tutoriales
+            <a href="#"><i class="bi bi-hdd-stack navicon"></i>Tutoriales
               <i class="bi bi-chevron-down toggle-dropdown"></i>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu"><!--
               <li class="dropdown" data-id="proxmox">
                 <a href="#"><i class="bi bi-server navicon"></i>Proxmox
                   <i class="bi bi-chevron-down toggle-dropdown"></i>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="/tutoriales/proxmox/servidor-lemp.html">Servidor LEMP</a></li>
-                  <li><a href="/tutoriales/proxmox/servidor-lemp.html">Deep Dropdown 2</a></li>
-                  <li><a href="/tutoriales/proxmox/servidor-lemp.html">Servidor LEMP</a></li>
+                  <li><a href="/tutoriales/proxmox/servidor-lemp">Servidor LEMP</a></li>
                 </ul>
               </li>
               <li class="dropdown" data-id="docker">
@@ -101,14 +102,14 @@
                   <li><a href="#">Contenedor 1</a></li>
                   <li><a href="#">Contenedor 2</a></li>
                 </ul>
-              </li>
+              </li>-->
             </ul>
           </li>
           <li class="dropdown" data-id="proyectos">
             <a href="#"><i class="bi bi-server navicon"></i>Proyectos<i
                 class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul class="dropdown-menu">
-              <li><a href="/tutoriales/proxmox/servidor-lemp.html">Servidor LEMP</a></li>
+              <li><a href="#">Servidor LEMP</a></li>
               <li><a href="#">Deep Dropdown 2</a></li>
             </ul>
           </li>
@@ -123,9 +124,9 @@
         <a href="https://github.com/Alejandromunsal" target="_blank" class="github" rel="noopener noreferrer"
           aria-label="github">
           <i class="bi bi-github"></i></a>
-          <a id="toggle-theme" class="theme-toggle"><i class="bi bi-sun-fill"></i></a>
+        <a id="toggle-theme" class="theme-toggle"><i class="bi bi-sun-fill"></i></a>
 
-          
+
       </div>
 
     </div>
@@ -704,6 +705,12 @@
   <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
 
+  <!-- marked.js para convertir Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+  <!-- highlight.js para resaltar código -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js" defer></script>
+  <!-- JS para cargar Markdown -->
+  <script src="/assets/js/load-markdown.js" defer></script>
   <!-- Main JS File -->
   <script src="/assets/js/main.js?v=2" defer></script>
 
