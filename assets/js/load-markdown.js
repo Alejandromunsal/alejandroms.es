@@ -6,12 +6,12 @@ const ICON_ERROR = `<i class="bi bi-exclamation-triangle"></i>`;
 // ========================
 // Función principal para cargar MD y extraer título
 // ========================
-function loadMarkdown(mdFile, containerId, dateContainerId = null, titleContainerId = 'md-title') {
+function loadMarkdown(mdFile, containerSelector = '.md-content', dateSelector = '.md-date', titleSelector = '.md-title') {
   fetch(`/content/tutorials/${mdFile}?v=${Date.now()}`)
     .then(res => res.text())
     .then(md => {
-      const container = document.getElementById(containerId);
-      if (!container) return;
+      const containers = document.querySelectorAll(containerSelector);
+      if (!containers.length) return;
 
       // ===== Extraer primer H1 como título =====
       const lines = md.split('\n');
@@ -34,60 +34,62 @@ function loadMarkdown(mdFile, containerId, dateContainerId = null, titleContaine
       }
 
       // Insertar título en HTML
-      if (titleContainerId && title) {
-        const titleEl = document.getElementById(titleContainerId);
-        if (titleEl) titleEl.innerText = title;
+      if (titleSelector && title) {
+        document.querySelectorAll(titleSelector).forEach(el => {
+          el.innerText = title;
+        });
         document.title = title + " | Alejandro Muñoz Salas";
       }
 
       // ===== Parsear Markdown a HTML =====
-      container.innerHTML = marked.parse(md);
+      containers.forEach(container => {
+        container.innerHTML = marked.parse(md);
 
-      // ===== Código y botón copiar =====
-      container.querySelectorAll('pre code').forEach(codeBlock => {
-        hljs.highlightElement(codeBlock);
+        // ===== Código y botón copiar =====
+        container.querySelectorAll('pre code').forEach(codeBlock => {
+          hljs.highlightElement(codeBlock);
 
-        const pre = codeBlock.parentElement;
-        pre.classList.add('markdown-code');
+          const pre = codeBlock.parentElement;
+          pre.classList.add('markdown-code');
 
-        const langClass = [...codeBlock.classList].find(c => c.startsWith('language-'));
-        const language = langClass ? langClass.replace('language-', '') : 'text';
-        pre.setAttribute('data-lang', language);
+          const langClass = [...codeBlock.classList].find(c => c.startsWith('language-'));
+          const language = langClass ? langClass.replace('language-', '') : 'text';
+          pre.setAttribute('data-lang', language);
 
-        if (!pre.querySelector('.copy-btn')) {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'copy-btn btn btn-sm btn-light';
-          btn.innerHTML = ICON_COPY;
+          if (!pre.querySelector('.copy-btn')) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'copy-btn btn btn-sm btn-light';
+            btn.innerHTML = ICON_COPY;
 
-          // Tooltip Bootstrap
-          btn.setAttribute('data-bs-toggle', 'tooltip');
-          btn.setAttribute('data-bs-placement', 'left');
-          btn.setAttribute('title', 'Copiar');
-          new bootstrap.Tooltip(btn);
+            // Tooltip Bootstrap
+            btn.setAttribute('data-bs-toggle', 'tooltip');
+            btn.setAttribute('data-bs-placement', 'left');
+            btn.setAttribute('title', 'Copiar');
+            new bootstrap.Tooltip(btn);
 
-          btn.addEventListener('click', e => {
-            e.preventDefault();
-            e.stopPropagation();
-            copyCode(codeBlock.textContent, btn);
-          });
+            btn.addEventListener('click', e => {
+              e.preventDefault();
+              e.stopPropagation();
+              copyCode(codeBlock.textContent, btn);
+            });
 
-          pre.appendChild(btn);
-        }
+            pre.appendChild(btn);
+          }
+        });
       });
 
       // ===== Fecha de modificación =====
-      if (dateContainerId) {
+      if (dateSelector) {
         fetch(`/forms/get-md-date.php?file=/content/tutorials/${mdFile}`)
           .then(res => res.json())
           .then(data => {
             if (data.lastModified) {
               const date = new Date(data.lastModified * 1000);
-              const dateContainer = document.getElementById(dateContainerId);
-              if (dateContainer) {
+              document.querySelectorAll(dateSelector).forEach(dateContainer => {
                 dateContainer.innerText =
                   `Última actualización: ${date.toLocaleDateString('es-ES')} | Alejandro Muñoz Salas`;
-              }
+              });
             }
           });
       }
@@ -95,8 +97,10 @@ function loadMarkdown(mdFile, containerId, dateContainerId = null, titleContaine
     })
     .catch(err => {
       console.error(err);
-      const container = document.getElementById(containerId);
-      if (container) container.innerHTML = '<p>No se pudo cargar el contenido.</p>';
+      const containers = document.querySelectorAll(containerSelector);
+      containers.forEach(container => {
+        container.innerHTML = '<p>No se pudo cargar el contenido.</p>';
+      });
     });
 }
 
@@ -165,17 +169,17 @@ function errorFeedback(btn) {
    Inicialización automática desde el nombre del HTML
 ========================= */
 document.addEventListener('DOMContentLoaded', () => {
-  const containerId = 'md-content';
-  const dateContainerId = 'md-date';
-  const titleContainerId = 'md-title';
+  const containerSelector = '.md-content';
+  const dateSelector = '.md-date';
+  const titleSelector = '.md-title';
 
-  const container = document.getElementById(containerId);
-  if (!container) return;
+  const containers = document.querySelectorAll(containerSelector);
+  if (!containers.length) return;
 
   // Tomar el nombre del HTML actual
   let path = window.location.pathname.split('/').filter(Boolean);
   let htmlFile = path[path.length - 1] || 'index.html'; 
   let mdFile = htmlFile.replace(/\.html$/, '.md');
 
-  loadMarkdown(mdFile, containerId, dateContainerId, titleContainerId);
+  loadMarkdown(mdFile, containerSelector, dateSelector, titleSelector);
 });

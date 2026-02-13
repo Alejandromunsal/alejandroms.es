@@ -2725,7 +2725,7 @@ section,
 /*--------------------------------------------------------------
 # Markdown
 --------------------------------------------------------------*/
-#md-content pre.markdown-code {
+.md-content pre.markdown-code {
   position: relative;
   background: var(--md-box-color);
   border-radius: 10px;
@@ -2739,7 +2739,7 @@ section,
 }
 
 /* Quitar fondo al code */
-#md-content pre.markdown-code code {
+.md-content pre.markdown-code code {
   background: transparent !important;
   padding: 0;
   border-radius: 0;
@@ -2747,7 +2747,7 @@ section,
 }
 
 /* Botón copiar */
-#md-content pre.markdown-code .copy-btn {
+.md-content pre.markdown-code .copy-btn {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -2756,7 +2756,7 @@ section,
 }
 
 /* Lenguaje arriba a la izquierda */
-#md-content pre.markdown-code::before {
+.md-content pre.markdown-code::before {
   content: attr(data-lang);
   position: absolute;
   top: 8px;
@@ -2767,11 +2767,11 @@ section,
   font-weight: 500;
 }
 
-#md-title {
+.md-title {
   padding-top: 30px;
 }
 
-#md-date {
+.md-date {
   font-size: small;
   color: #8b949e;
 }

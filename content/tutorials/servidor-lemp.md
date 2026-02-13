@@ -1,5 +1,7 @@
 # Servidor LEMP en Debian 12 en LXC (Proxmox)
 
+---
+
 ## Introducción
 
 La pila de software LEMP es un conjunto de herramientas utilizadas para alojar y servir aplicaciones y sitios web dinámicos. Su nombre proviene de las iniciales de sus componentes principales: Linux como sistema operativo, Nginx como servidor web (la “E” proviene de la pronunciación de Nginx), MariaDB como sistema de gestión de bases de datos y PHP para procesar el contenido dinámico del lado del servidor.
