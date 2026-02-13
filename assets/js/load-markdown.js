@@ -86,7 +86,7 @@ function loadMarkdown(mdFile, containerId, dateContainerId = null, titleContaine
               const dateContainer = document.getElementById(dateContainerId);
               if (dateContainer) {
                 dateContainer.innerText =
-                  `Última actualización: ${date.toLocaleDateString('es-ES')} · Alejandro Muñoz Salas`;
+                  `Última actualización: ${date.toLocaleDateString('es-ES')} | Alejandro Muñoz Salas`;
               }
             }
           });

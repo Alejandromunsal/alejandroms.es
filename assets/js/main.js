@@ -244,30 +244,50 @@
   =============================== */
   if (window.GLightbox) GLightbox({ selector: '.glightbox' });
 
-  /* ===============================
-     Auto-open dropdowns by URL
-  =============================== */
-  function normalizePath(path) { return path.replace(window.location.origin, '').replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, ''); }
+/* ===============================
+   Auto-open dropdowns by URL (mejorado)
+=============================== */
+function normalizePath(path) {
+  // Elimina el dominio, index.html, .html y barra final
+  let p = path.replace(window.location.origin, '')
+              .replace(/index\.html$/, '')
+              .replace(/\.html$/, '')
+              .replace(/\/$/, '');
+  // La ruta raíz será ''
+  return p || '/';
+}
 
-  function openMenuByCurrentURL() {
-    const currentPath = normalizePath(window.location.pathname);
-    document.querySelectorAll('#navmenu a[href]').forEach(link => {
-      const href = link.getAttribute('href');
-      if (!href || href === '#') return;
-      if (currentPath.includes(normalizePath(href))) {
-        link.classList.add('active');
-        let parent = link.closest('li.dropdown');
-        while (parent) {
-          parent.classList.add('active');
-          parent.querySelector(':scope > ul')?.classList.add('dropdown-active');
-          const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
-          if (arrow) arrow.style.transform = 'rotate(180deg)';
-          parent = parent.parentElement.closest('li.dropdown');
-        }
+function openMenuByCurrentURL() {
+  const currentPath = normalizePath(window.location.pathname);
+
+  document.querySelectorAll('#navmenu a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href === '#') return;
+
+    const linkPath = normalizePath(href);
+
+    // Comparación exacta
+    if (currentPath === linkPath) {
+      link.classList.add('active');
+
+      // Abrir padres de dropdown
+      let parent = link.closest('li.dropdown');
+      while (parent) {
+        parent.classList.add('active');
+        const submenu = parent.querySelector(':scope > ul');
+        if (submenu) submenu.classList.add('dropdown-active');
+
+        const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+
+        parent = parent.parentElement.closest('li.dropdown');
       }
-    });
-  }
-  window.addEventListener('load', openMenuByCurrentURL);
+    }
+  });
+}
+
+window.addEventListener('load', openMenuByCurrentURL);
+
 
 /* ===============================
    Dark / Light Theme con sincronización entre pestañas

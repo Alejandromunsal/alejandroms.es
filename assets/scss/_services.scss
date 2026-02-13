@@ -397,3 +397,10 @@
     }
   }
   
+  #service-details.section{
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding-top: 40px;
+    padding-bottom: 60px;
+    overflow: clip;
+  }
