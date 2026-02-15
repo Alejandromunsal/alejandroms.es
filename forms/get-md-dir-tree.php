@@ -15,4 +15,16 @@ function scanDirRecursive($dir) {
     return $result;
 }
 
-echo json_encode(scanDirRecursive(__DIR__ . '/../content/tutorials'));
+$section = $_GET['section'] ?? 'tutorials';
+
+$allowed = ['tutorials', 'proyectos'];
+
+if (!in_array($section, $allowed)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid section']);
+    exit;
+}
+
+echo json_encode(
+    scanDirRecursive(__DIR__ . "/../content/$section")
+);

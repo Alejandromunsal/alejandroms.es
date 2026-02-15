@@ -6,9 +6,9 @@ const ICON_ERROR = `<i class="bi bi-exclamation-triangle"></i>`;
 // ========================
 // Función principal para cargar MD y extraer título
 // ========================
-function loadMarkdown(mdFile, containerSelector = '.md-content', dateSelector = '.md-date', titleSelector = '.md-title') {
-  fetch(`/content/tutorials/${mdFile}?v=${Date.now()}`)
-    .then(res => res.text())
+function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSelector = '.md-date', titleSelector = '.md-title') {
+  fetch(`${baseDir}/${mdFile}?v=${Date.now()}`)
+  .then(res => res.text())
     .then(md => {
       const containers = document.querySelectorAll(containerSelector);
       if (!containers.length) return;
@@ -81,8 +81,8 @@ function loadMarkdown(mdFile, containerSelector = '.md-content', dateSelector = 
 
       // ===== Fecha de modificación =====
       if (dateSelector) {
-        fetch(`/forms/get-md-date.php?file=/content/tutorials/${mdFile}`)
-          .then(res => res.json())
+        fetch(`/forms/get-md-date.php?file=${baseDir}/${mdFile}`)
+        .then(res => res.json())
           .then(data => {
             if (data.lastModified) {
               const date = new Date(data.lastModified * 1000);
@@ -186,10 +186,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // /tutoriales/proxmox/servidor-lemp
   // -> proxmox/servidor-lemp.md
 
-  let mdFile = path
-    .replace(/^\/tutoriales\//, '') // quitar prefijo
-    .replace(/\/$/, '')             // quitar slash final
-    + '.md';
-
-  loadMarkdown(mdFile, containerSelector, dateSelector, titleSelector);
+  let baseDir = '';
+  let cleanPath = '';
+  
+  if (path.startsWith('/tutoriales/')) {
+    baseDir = '/content/tutorials';
+    cleanPath = path.replace(/^\/tutoriales\//, '');
+  }
+  else if (path.startsWith('/proyectos/')) {
+    baseDir = '/content/proyectos';
+    cleanPath = path.replace(/^\/proyectos\//, '');
+  }
+  else {
+    return; // no es página markdown
+  }
+  
+  const mdFile = cleanPath.replace(/\/$/, '') + '.md';
+  
+  loadMarkdown(baseDir, mdFile, containerSelector, dateSelector, titleSelector);
+  
 });

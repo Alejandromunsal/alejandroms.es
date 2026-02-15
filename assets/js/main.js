@@ -1,5 +1,5 @@
 /**
- * Updated & Optimized: Feb 13 2026 with Bootstrap v5.3.7
+ * Updated & Final: Feb 14 2026 with Bootstrap v5.3.7
  * Author: Alejandro Muñoz Salas
  */
 (function () {
@@ -286,19 +286,18 @@
   window.addEventListener('load', openMenuByCurrentURL);
 
   /* ===============================
-     Tutoriales dinámicos en header
+     Tutoriales y Proyectos dinámicos
   =============================== */
   const categoryIcons = {
     proxmox: 'bi bi-server',
     docker: 'bi bi-box',
     linux: 'bi bi-terminal',
-    network: 'bi bi-wifi',
+    web: 'bi bi-wifi',
     default: 'bi bi-hdd-stack'
   };
-
   const getIconClass = (category) => categoryIcons[category.toLowerCase()] || categoryIcons.default;
 
-  const createDropdown = (category, files) => {
+  const createDropdown = (category, files, basePath) => {
     const li = document.createElement('li');
     li.classList.add('dropdown');
     li.dataset.id = category;
@@ -309,7 +308,7 @@
       </a>
       <ul class="dropdown-menu">
         ${files.map(file => `
-          <li><a href="/tutoriales/${category}/${file}">
+          <li><a href="/${basePath}/${category}/${file}">
             <i class="bi bi-file-earmark-text navicon"></i> ${file.replace(/-/g,' ')}
           </a></li>
         `).join('')}
@@ -331,32 +330,95 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    const menu = document.querySelector('#navmenu li[data-id="tutoriales"] > .dropdown-menu');
-    if (!menu) return;
+    const tutorialMenu = document.querySelector('#navmenu li[data-id="tutoriales"] > .dropdown-menu');
+    const projectMenu = document.querySelector('#navmenu li[data-id="proyectos"] > .dropdown-menu');
 
-    fetch('/forms/get-md-dir-tree.php')
-      .then(res => res.json())
-      .then(data => {
-        Object.entries(data).forEach(([category, files]) => menu.appendChild(createDropdown(category, files)));
+    if (tutorialMenu) {
+      fetch('/forms/get-md-dir-tree.php?section=tutorials')
+        .then(res => res.json())
+        .then(data => Object.entries(data).forEach(([category, files]) => 
+            tutorialMenu.appendChild(createDropdown(category, files, 'tutoriales'))
+        ))
+        .catch(err => console.error('Error cargando tutoriales dinámicos:', err));
+    }
 
-        // Abrir automáticamente según URL
-        const currentPath = window.location.pathname.replace(window.location.origin, '').replace(/\/$/, '');
-        document.querySelectorAll('#navmenu li.dropdown a[href]').forEach(link => {
-          if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-            let parent = link.closest('li.dropdown');
-            while (parent) {
-              parent.classList.add('active');
-              const submenu = parent.querySelector(':scope > ul');
-              if (submenu) submenu.style.display = 'block';
-              const arrow = parent.querySelector(':scope > a > .toggle-dropdown');
-              if (arrow) arrow.style.transform = 'rotate(180deg)';
-              parent = parent.parentElement.closest('li.dropdown');
-            }
-          }
-        });
-      })
-      .catch(err => console.error('Error cargando tutoriales dinámicos:', err));
+    if (projectMenu) {
+      fetch('/forms/get-md-dir-tree.php?section=proyectos')
+        .then(res => res.json())
+        .then(data => Object.entries(data).forEach(([category, files]) => 
+            projectMenu.appendChild(createDropdown(category, files, 'proyectos'))
+        ))
+        .catch(err => console.error('Error cargando proyectos dinámicos:', err));
+    }
   });
 
+    /**
+   * Init swiper sliders
+   */
+    function initSwiper() {
+      document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+        let config = JSON.parse(
+          swiperElement.querySelector(".swiper-config").innerHTML.trim()
+        );
+  
+        if (swiperElement.classList.contains("swiper-tab")) {
+          initSwiperWithCustomPagination(swiperElement, config);
+        } else {
+          new Swiper(swiperElement, config);
+        }
+      });
+    }
+  
+    window.addEventListener("load", initSwiper);
+
+      /**
+   * Correct scrolling position upon page load for URLs containing hash links.
+   */
+  window.addEventListener('load', function(e) {
+    if (window.location.hash) {
+      if (document.querySelector(window.location.hash)) {
+        setTimeout(() => {
+          let section = document.querySelector(window.location.hash);
+          let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
+          window.scrollTo({
+            top: section.offsetTop - parseInt(scrollMarginTop),
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    }
+  });
+  
+    /**
+   * Init isotope layout and filters
+   */
+    document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
+      let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
+      let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
+      let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
+  
+      let initIsotope;
+      imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
+        initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
+          itemSelector: '.isotope-item',
+          layoutMode: layout,
+          filter: filter,
+          sortBy: sort
+        });
+      });
+  
+      isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
+        filters.addEventListener('click', function() {
+          isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
+          this.classList.add('filter-active');
+          initIsotope.arrange({
+            filter: this.getAttribute('data-filter')
+          });
+          if (typeof aosInit === 'function') {
+            aosInit();
+          }
+        }, false);
+      });
+  
+    });
 })();
