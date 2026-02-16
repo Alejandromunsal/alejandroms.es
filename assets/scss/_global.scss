@@ -104,6 +104,13 @@
     background-color: var(--background-color);
     font-family: var(--default-font);
   }
+
+  /* Desktop layout */
+@media (min-width: 1200px) {
+  body {
+    padding-left: 330px;
+  }
+}
   
   a {
     color: var(--accent-color);

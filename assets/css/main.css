@@ -105,6 +105,12 @@ body {
   font-family: var(--default-font);
 }
 
+/* Desktop layout */
+@media (min-width: 1200px) {
+  body {
+    padding-left: 330px;
+  }
+}
 a {
   color: var(--accent-color);
   text-decoration: none;
@@ -964,9 +970,6 @@ section,
   }
   .header-toggle {
     display: none;
-  }
-  .header ~ main {
-    margin-left: 330px;
   }
   .header.header-closed,
   .header.header-hint {
