@@ -87,29 +87,62 @@ export function initHeader() {
   const toggleDropdown = (li, menu, arrow) => li.classList.contains('active') ? closeDropdown(li) : openDropdown(li, menu, arrow);
 
   const openDropdown = (li, menu, arrow) => {
+
     li.classList.add('active');
-    menu.style.display='block';
-    menu.style.height='0';
-    menu.style.opacity=0;
-    const height = menu.scrollHeight+'px'; menu.offsetHeight;
-    menu.style.transition='height 0.3s ease, opacity 0.3s ease';
-    menu.style.height=height; menu.style.opacity=1;
-    if(arrow) arrow.style.transform='rotate(180deg)';
-    menu.addEventListener('transitionend',()=>{menu.style.height=''; menu.style.transition='';},{once:true});
+  
+    menu.style.display = 'block';
+    menu.style.height = '0px';
+    menu.style.opacity = '0';
+    menu.style.overflow = 'hidden';
+  
+    const height = menu.scrollHeight;
+  
+    requestAnimationFrame(() => {
+      menu.style.transition = 'height 0.3s ease, opacity 0.3s ease';
+      menu.style.height = height + 'px';
+      menu.style.opacity = '1';
+    });
+  
+    menu.addEventListener('transitionend', () => {
+      menu.style.height = '';
+      menu.style.overflow = '';
+      menu.style.transition = '';
+    }, { once: true });
+  
+    if (arrow) arrow.style.transform = 'rotate(180deg)';
   };
+  
 
   const closeDropdown = (li) => {
+
     li.classList.remove('active');
+  
     const menu = li.querySelector(':scope>ul');
     const arrow = li.querySelector(':scope>a>.toggle-dropdown');
-    if(!menu) return;
-    menu.style.height=menu.scrollHeight+'px'; menu.offsetHeight;
-    menu.style.transition='height 0.3s ease, opacity 0.3s ease';
-    menu.style.height='0'; menu.style.opacity=0;
-    if(arrow) arrow.style.transform='rotate(0deg)';
-    menu.addEventListener('transitionend',()=>{menu.style.display='none'; menu.style.height=''; menu.style.opacity=''; menu.style.transition='';},{once:true});
-    li.querySelectorAll('li.dropdown.active').forEach(child=>closeDropdown(child));
+    if (!menu) return;
+  
+    const height = menu.scrollHeight;
+  
+    menu.style.height = height + 'px';
+    menu.style.overflow = 'hidden';
+  
+    requestAnimationFrame(() => {
+      menu.style.transition = 'height 0.3s ease, opacity 0.3s ease';
+      menu.style.height = '0px';
+      menu.style.opacity = '0';
+    });
+  
+    menu.addEventListener('transitionend', () => {
+      menu.style.display = 'none';
+      menu.style.height = '';
+      menu.style.opacity = '';
+      menu.style.transition = '';
+      menu.style.overflow = '';
+    }, { once: true });
+  
+    if (arrow) arrow.style.transform = 'rotate(0deg)';
   };
+  
 
   // Inicializar todos los toggles **después** de construir el menú
   const initDropdownToggles = () => {
