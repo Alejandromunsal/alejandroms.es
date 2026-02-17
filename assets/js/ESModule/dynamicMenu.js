@@ -1,4 +1,3 @@
-// ESModule/dynamicMenu.js
 export function initDynamicMenu() {
 
   const categoryIcons = {
@@ -20,10 +19,8 @@ export function initDynamicMenu() {
 
       const a = document.createElement('a');
       a.href = hasChildren ? '#' : `/${basePath}/${key}`;
-      //a.className = hasChildren ? 'dropdown-toggle' : '';
       a.innerHTML = `<i class="${getIconClass(key)} navicon"></i>${key.charAt(0).toUpperCase() + key.slice(1)}`;
 
-      // 🔹 Solo añadir toggle-dropdown si NO existe ya
       if (hasChildren && !a.querySelector('.toggle-dropdown')) {
         const arrow = document.createElement('i');
         arrow.className = 'bi bi-chevron-down toggle-dropdown';
@@ -36,7 +33,6 @@ export function initDynamicMenu() {
       submenu.classList.add('dropdown-menu');
       li.appendChild(submenu);
 
-      // Agregar hijos recursivamente
       if (Array.isArray(value)) {
         value.forEach(f => {
           const childLi = document.createElement('li');
@@ -53,16 +49,20 @@ export function initDynamicMenu() {
 
   const loadDynamicMenuRecursive = (selector, section, basePath) => {
     const menu = document.querySelector(selector);
-    if (!menu) return;
+    if (!menu) return Promise.resolve();
 
-    fetch(`/forms/get-md-dir-tree.php?section=${section}`)
+    return fetch(`/forms/get-md-dir-tree.php?section=${section}`)
       .then(r => r.json())
       .then(data => {
         createMenuItems(data, basePath).forEach(li => menu.appendChild(li));
-      })
-      .catch(console.error);
+      });
   };
 
-  loadDynamicMenuRecursive('#navmenu li[data-id="tutoriales"]>.dropdown-menu', 'tutorials', 'tutoriales');
-  loadDynamicMenuRecursive('#navmenu li[data-id="proyectos"]>.dropdown-menu', 'proyectos', 'proyectos');
+  // Cargar ambos menús y disparar evento cuando termine
+  Promise.all([
+    loadDynamicMenuRecursive('#navmenu li[data-id="tutoriales"]>.dropdown-menu', 'tutorials', 'tutoriales'),
+    loadDynamicMenuRecursive('#navmenu li[data-id="proyectos"]>.dropdown-menu', 'proyectos', 'proyectos')
+  ]).then(() => {
+    document.dispatchEvent(new Event('dynamicMenuLoaded'));
+  }).catch(console.error);
 }
