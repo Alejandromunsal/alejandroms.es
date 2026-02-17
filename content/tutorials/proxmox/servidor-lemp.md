@@ -1,6 +1,29 @@
+![Servidor LEMP](/assets/img/tutoriales/lemp/lemp.jpg)
+
+md-info:
+- Instalación de Debian 12 en LXC Proxmox
+- Configuración de Nginx como servidor web
+- Instalación y configuración de PHP y PHP-FPM
+- Optimización del stack LEMP para producción
+
+related:
+- Configurar SSL en Nginx | /services/nginx-ssl.html | bi-server | Aprende a securizar tu servidor web
+- Instalar MySQL en LXC | /services/mysql-lxc.html | bi-database | Configura bases de datos en LXC
+- Optimizar PHP-FPM | /services/php-fpm-setup.html | bi-gear | Mejora el rendimiento PHP
+
+md-details:
+- Tiempo estimado | bi-clock | 30-45 minutos
+- Requisitos | bi-hdd-stack | Proxmox con LXC, Debian 12, acceso root
+- Nivel | bi-terminal | Intermedio / Avanzado
+- Lenguajes involucrados | bi-code-slash | Bash, PHP, configuración de Nginx
+
+
+
 # Servidor LEMP en Debian 12 en LXC (Proxmox)
 
 ---
+
+Este tutorial te guía paso a paso para desplegar un servidor LEMP (Linux + Nginx + MySQL/MariaDB + PHP) en un contenedor LXC de Proxmox, asegurando un entorno estable, seguro y optimizado para tus proyectos web.
 
 ## Introducción
 
