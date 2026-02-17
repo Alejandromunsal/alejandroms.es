@@ -1,19 +1,57 @@
-// Iconos Bootstrap
+// ESModule/markdownLoader.js
+
+/* =========================
+   ICONOS
+========================= */
 const ICON_COPY = `<i class="bi bi-clipboard"></i>`;
 const ICON_OK = `<i class="bi bi-check2"></i>`;
 const ICON_ERROR = `<i class="bi bi-exclamation-triangle"></i>`;
 
-// ========================
-// Función principal para cargar MD y extraer título
-// ========================
-function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSelector = '.md-date', titleSelector = '.md-title') {
+/* =========================
+   INIT PUBLICO
+========================= */
+export function initMarkdownLoader() {
+
+  const containerSelector = '.md-content';
+  const dateSelector = '.md-date';
+  const titleSelector = '.md-title';
+
+  const containers = document.querySelectorAll(containerSelector);
+  if (!containers.length) return;
+
+  let path = window.location.pathname;
+
+  let baseDir = '';
+  let cleanPath = '';
+
+  if (path.startsWith('/tutoriales/')) {
+    baseDir = '/content/tutorials';
+    cleanPath = path.replace(/^\/tutoriales\//, '');
+  } else if (path.startsWith('/proyectos/')) {
+    baseDir = '/content/proyectos';
+    cleanPath = path.replace(/^\/proyectos\//, '');
+  } else {
+    return;
+  }
+
+  const mdFile = cleanPath.replace(/\/$/, '') + '.md';
+
+  loadMarkdown(baseDir, mdFile, containerSelector, dateSelector, titleSelector);
+}
+
+/* =========================
+   EXPORTABLE loadMarkdown
+========================= */
+export function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSelector = '.md-date', titleSelector = '.md-title') {
+
   fetch(`${baseDir}/${mdFile}?v=${Date.now()}`)
-  .then(res => res.text())
+    .then(res => res.text())
     .then(md => {
+
       const containers = document.querySelectorAll(containerSelector);
       if (!containers.length) return;
 
-      // ===== Extraer primer H1 como título =====
+      /* ===== EXTRAER H1 ===== */
       const lines = md.split('\n');
       let title = '';
       let titleLineIndex = -1;
@@ -27,26 +65,22 @@ function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSe
         }
       }
 
-      // Quitar la línea del H1 del Markdown
       if (titleLineIndex >= 0) {
         lines.splice(titleLineIndex, 1);
         md = lines.join('\n');
       }
 
-      // Insertar título en HTML
       if (titleSelector && title) {
-        document.querySelectorAll(titleSelector).forEach(el => {
-          el.innerText = title;
-        });
-        document.title = title + " | Alejandro Muñoz Salas";
+        document.querySelectorAll(titleSelector).forEach(el => el.innerText = title);
+        document.title = `${title} | Alejandro Muñoz Salas`;
       }
 
-      // ===== Parsear Markdown a HTML =====
+      /* ===== PARSE MARKDOWN ===== */
       containers.forEach(container => {
         container.innerHTML = marked.parse(md);
 
-        // ===== Código y botón copiar =====
         container.querySelectorAll('pre code').forEach(codeBlock => {
+
           hljs.highlightElement(codeBlock);
 
           const pre = codeBlock.parentElement;
@@ -54,18 +88,20 @@ function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSe
 
           const langClass = [...codeBlock.classList].find(c => c.startsWith('language-'));
           const language = langClass ? langClass.replace('language-', '') : 'text';
+
           pre.setAttribute('data-lang', language);
 
           if (!pre.querySelector('.copy-btn')) {
+
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'copy-btn btn btn-sm btn-light';
             btn.innerHTML = ICON_COPY;
 
-            // Tooltip Bootstrap
             btn.setAttribute('data-bs-toggle', 'tooltip');
             btn.setAttribute('data-bs-placement', 'left');
             btn.setAttribute('title', 'Copiar');
+
             new bootstrap.Tooltip(btn);
 
             btn.addEventListener('click', e => {
@@ -79,35 +115,36 @@ function loadMarkdown(baseDir, mdFile, containerSelector = '.md-content', dateSe
         });
       });
 
-      // ===== Fecha de modificación =====
+      /* ===== FECHA ===== */
       if (dateSelector) {
         fetch(`/forms/get-md-date.php?file=${baseDir}/${mdFile}`)
-        .then(res => res.json())
+          .then(res => res.json())
           .then(data => {
-            if (data.lastModified) {
-              const date = new Date(data.lastModified * 1000);
-              document.querySelectorAll(dateSelector).forEach(dateContainer => {
-                dateContainer.innerText =
-                  `Última actualización: ${date.toLocaleDateString('es-ES')} | Alejandro Muñoz Salas`;
-              });
-            }
+            if (!data.lastModified) return;
+
+            const date = new Date(data.lastModified * 1000);
+
+            document.querySelectorAll(dateSelector).forEach(el => {
+              el.innerText =
+                `Última actualización: ${date.toLocaleDateString('es-ES')} | Alejandro Muñoz Salas`;
+            });
           });
       }
 
     })
     .catch(err => {
       console.error(err);
-      const containers = document.querySelectorAll(containerSelector);
-      containers.forEach(container => {
+      document.querySelectorAll(containerSelector).forEach(container => {
         container.innerHTML = '<p>No se pudo cargar el contenido.</p>';
       });
     });
 }
 
 /* =========================
-   Copiar + feedback
+   COPY SYSTEM
 ========================= */
 function copyCode(text, btn) {
+
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text)
       .then(() => copiedFeedback(btn))
@@ -164,45 +201,3 @@ function errorFeedback(btn) {
     tooltip.setContent({ '.tooltip-inner': 'Copiar' });
   }, 1500);
 }
-
-/* =========================
-   Inicialización automática desde el nombre del HTML
-========================= */
-document.addEventListener('DOMContentLoaded', () => {
-  const containerSelector = '.md-content';
-  const dateSelector = '.md-date';
-  const titleSelector = '.md-title';
-
-  const containers = document.querySelectorAll(containerSelector);
-  if (!containers.length) return;
-
-  // =========================
-  // Detectar markdown desde URL
-  // =========================
-
-  let path = window.location.pathname;
-
-  // ejemplo:
-  // /tutoriales/proxmox/servidor-lemp
-  // -> proxmox/servidor-lemp.md
-
-  let baseDir = '';
-  let cleanPath = '';
-  
-  if (path.startsWith('/tutoriales/')) {
-    baseDir = '/content/tutorials';
-    cleanPath = path.replace(/^\/tutoriales\//, '');
-  }
-  else if (path.startsWith('/proyectos/')) {
-    baseDir = '/content/proyectos';
-    cleanPath = path.replace(/^\/proyectos\//, '');
-  }
-  else {
-    return; // no es página markdown
-  }
-  
-  const mdFile = cleanPath.replace(/\/$/, '') + '.md';
-  
-  loadMarkdown(baseDir, mdFile, containerSelector, dateSelector, titleSelector);
-  
-});
