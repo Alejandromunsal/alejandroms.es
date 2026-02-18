@@ -220,6 +220,31 @@ export function loadMarkdown(
       containers.forEach(container => {
         container.innerHTML = marked.parse(md);
 
+        /* =========================
+           LINKS EXTERNOS -> NUEVA PESTAÑA
+        ========================= */
+        container.querySelectorAll('a[href]').forEach(link => {
+          const url = link.getAttribute('href');
+
+          // ignorar anchors internos y rutas relativas
+          if (!url || url.startsWith('#') || url.startsWith('/')) return;
+
+          // detectar enlaces externos
+          if (url.startsWith('http://') || url.startsWith('https://')) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+          }
+        });
+
+
+        /* =========================
+           IMÁGENES INLINE DEL MD
+        ========================= */
+        container.querySelectorAll('img').forEach(img => {
+          img.classList.add('md-inline-img');
+          img.loading = 'lazy';
+        });
+
         container.querySelectorAll('pre code').forEach(codeBlock => {
           hljs.highlightElement(codeBlock);
 

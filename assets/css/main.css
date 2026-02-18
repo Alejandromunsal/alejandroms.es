@@ -2769,4 +2769,34 @@ section, .section {
   color: #8b949e;
 }
 
+.md-image {
+  text-align: center;
+  margin: 2.5rem auto;
+}
+
+.md-image img {
+  max-width: 750px;
+  width: 100%;
+  height: auto;
+}
+
+.md-caption {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* =========================
+   IMÁGENES CONTENIDO MD
+========================= */
+.md-content img.md-inline-img {
+  max-width: 520px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 2rem auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
 /*# sourceMappingURL=main.css.map */

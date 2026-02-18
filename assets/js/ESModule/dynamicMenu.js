@@ -1,10 +1,12 @@
 export function initDynamicMenu() {
 
   const categoryIcons = {
-    proxmox: 'bi bi-server',
-    docker: 'bi bi-box',
-    linux: 'bi bi-terminal',
-    web: 'bi bi-wifi',
+    proxmox: 'si si-proxmox',
+    docker: 'si si-docker',
+    linux: 'si si-linux',
+    web: 'si si-html5',
+    arduino: 'si si-arduino',
+    esp32: 'bi bi-cpu',
     default: 'bi bi-hdd-stack'
   };
 
