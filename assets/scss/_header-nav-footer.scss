@@ -13,7 +13,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 300px;
+    width: 330px;
     z-index: 997;
     transform: translateX(-98%);
     transition: transform 0.3s ease;
@@ -345,3 +345,12 @@
     font-size: 13px;
     text-align: center;
 }
+.navmenu li[data-level="2"] > a {
+    margin: 0px!important;
+    padding: 10px 0!important;
+  }
+  .navmenu li[data-level="2"] > a {
+    margin: 0px!important;
+    padding: 10px 0!important;
+    white-space: normal !important; /* permite que salte de línea */
+  }

@@ -5,6 +5,9 @@ md-info:
 - Configuración de Nginx como servidor web
 - Instalación y configuración de PHP y PHP-FPM
 - Optimización del stack LEMP para producción
+- madrid
+- mala
+- npm
 
 related:
 - Configurar SSL en Nginx | /services/nginx-ssl.html | bi-server | Aprende a securizar tu servidor web

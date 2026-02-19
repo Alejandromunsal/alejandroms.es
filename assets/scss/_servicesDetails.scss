@@ -1,0 +1,180 @@
+/*--------------------------------------------------------------
+# Service Details Section
+--------------------------------------------------------------*/
+.service-details .service-details-slider {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    z-index: 1;
+  }
+  
+  .service-details .service-details-slider .swiper-wrapper {
+    height: auto !important;
+  }
+  
+  .service-details .service-details-slider .swiper-pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+  .service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: var(--contrast-color);
+    opacity: 0.5;
+    transition: 0.3s;
+  }
+  
+  .service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    opacity: 1;
+    width: 20px;
+    border-radius: 5px;
+  }
+  
+  .service-details .content h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .service-details .content p {
+    color: color-mix(in srgb, var(--default-color), transparent 20%);
+    margin-bottom: 15px;
+  }
+  
+  .service-details .content .features .feature-box {
+    padding: 20px;
+    background: var(--surface-color);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: 0.3s;
+  }
+  
+  .service-details .content .features .feature-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .service-details .content .features .feature-box i {
+    font-size: 24px;
+    color: var(--accent-color);
+    margin-right: 15px;
+  }
+  
+  .service-details .content .features .feature-box h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .service-details .service-info {
+    background: var(--surface-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .service-details .service-info h4 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+  }
+  
+  .service-details .service-info .info-item {
+    margin-bottom: 25px;
+  }
+  
+  .service-details .service-info .info-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .service-details .service-info .info-item i {
+    font-size: 24px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+  }
+  
+  .service-details .service-info .info-item h5 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  .service-details .service-info .info-item p {
+    color: color-mix(in srgb, var(--default-color), transparent 20%);
+    margin: 0;
+  }
+  
+  .service-details .related-services {
+    background: var(--surface-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .service-details .related-services h4 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+  }
+  
+  .service-details .related-services .service-item {
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  }
+  
+  .service-details .related-services .service-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .service-details .related-services .service-item i {
+    font-size: 24px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+  }
+  
+  .service-details .related-services .service-item h5 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .service-details .related-services .service-item h5 a {
+    color: var(--heading-color);
+    transition: 0.3s;
+  }
+  
+  .service-details .related-services .service-item h5 a:hover {
+    color: var(--accent-color);
+  }
+  
+  .service-details .related-services .service-item p {
+    color: color-mix(in srgb, var(--default-color), transparent 20%);
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  @media (max-width: 991px) {
+  
+    .service-details .service-info,
+    .service-details .related-services {
+      margin-top: 30px;
+    }
+  }
+  
+  #service-details.section {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding-top: 40px;
+    padding-bottom: 60px;
+    overflow: clip;
+  }

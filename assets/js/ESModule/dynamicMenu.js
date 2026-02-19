@@ -12,9 +12,10 @@ export function initDynamicMenu() {
 
   const getIconClass = cat => categoryIcons[cat.toLowerCase()] || categoryIcons.default;
 
-  const createMenuItems = (data, basePath) => {
+  const createMenuItems = (data, basePath, level = 1) => {
     return Object.entries(data).map(([key, value]) => {
       const li = document.createElement('li');
+      li.dataset.level = level;
       li.classList.add('dropdown');
 
       const hasChildren = (Array.isArray(value) && value.length > 0) || (typeof value === 'object' && Object.keys(value).length > 0);
@@ -37,11 +38,24 @@ export function initDynamicMenu() {
 
       if (Array.isArray(value)) {
         value.forEach(f => {
+
           const childLi = document.createElement('li');
-          childLi.innerHTML = `<a href="/${basePath}/${key}/${f}"><i class="bi bi-file-earmark-text navicon"></i>${f.replace(/-/g,' ')}</a>`;
+
+          // ⭐ IMPORTANTE
+          childLi.dataset.level = level + 1;
+
+          const a = document.createElement('a');
+          a.href = `/${basePath}/${key}/${f}`;
+          a.innerHTML = `
+            <i class="bi bi-file-earmark-text navicon"></i>
+            ${f.replace(/-/g, ' ')}
+          `;
+
+          childLi.appendChild(a);
           submenu.appendChild(childLi);
         });
-      } else if (typeof value === 'object') {
+      }
+      else if (typeof value === 'object') {
         createMenuItems(value, `${basePath}/${key}`).forEach(c => submenu.appendChild(c));
       }
 

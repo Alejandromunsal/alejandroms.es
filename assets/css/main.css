@@ -73,11 +73,6 @@ body.light-mode {
 }
 
 /* Color Presets */
-.light-background {
-  --background-color: var(--section-alt-bg);
-  --surface-color: var(--section-alt-surface);
-}
-
 .dark-background {
   --background-color: #040b14;
   --default-color: #ffffff;
@@ -772,7 +767,7 @@ section, .section {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 300px;
+  width: 330px;
   z-index: 997;
   transform: translateX(-98%);
   transition: transform 0.3s ease;
@@ -1136,6 +1131,17 @@ section, .section {
   margin-top: 4px;
   font-size: 13px;
   text-align: center;
+}
+
+.navmenu li[data-level="2"] > a {
+  margin: 0px !important;
+  padding: 10px 0 !important;
+}
+
+.navmenu li[data-level="2"] > a {
+  margin: 0px !important;
+  padding: 10px 0 !important;
+  white-space: normal !important; /* permite que salte de línea */
 }
 
 /**
@@ -1873,12 +1879,6 @@ section, .section {
     margin-bottom: 2rem;
   }
 }
-/**
-* Template Name: portfolio
-* Template URL: https://alejandroms.es
-* Updated: Feb 10 2026 with Bootstrap v5.3.7
-* Author: Alejandro Muñoz Salas
-*/
 /*--------------------------------------------------------------
 # Services Section
 --------------------------------------------------------------*/
@@ -1951,10 +1951,16 @@ section, .section {
   }
 }
 .services .service-card {
-  padding: 40px 40px 40px 40px;
+  position: relative;
+  padding: 40px;
   margin-bottom: 30px;
   border: 2px solid color-mix(in srgb, var(--accent-color), transparent 90%);
-  transition: all 0.3s ease;
+  transition: border-color 0.5s ease, background-color 0.5s ease, color 0.5s ease;
+  will-change: transform, opacity;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .services .service-card .service-icon {
@@ -1971,7 +1977,7 @@ section, .section {
 .services .service-card .service-icon i {
   font-size: 32px;
   color: var(--accent-color);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .services .service-card h3 {
@@ -1983,6 +1989,10 @@ section, .section {
 .services .service-card h3 a {
   color: var(--heading-color);
   transition: color 0.3s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .services .service-card h3 a span {
@@ -1995,8 +2005,8 @@ section, .section {
 
 .services .service-card p {
   color: var(--default-color);
+  margin-bottom: auto;
   transition: color 0.3s ease;
-  margin-bottom: 0;
 }
 
 .services .service-card .card-action {
@@ -2012,7 +2022,8 @@ section, .section {
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
+  pointer-events: none;
 }
 
 .services .service-card .card-action i {
@@ -2037,7 +2048,7 @@ section, .section {
   z-index: -1;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .services .service-card:hover {
@@ -2054,10 +2065,6 @@ section, .section {
   color: var(--accent-color);
 }
 
-.services .service-card:hover h3 a:hover {
-  color: var(--accent-color);
-}
-
 .services .service-card:hover p {
   color: color-mix(in srgb, var(--default-color), transparent 20%);
 }
@@ -2066,6 +2073,7 @@ section, .section {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .services .service-card:hover .service-icon i {
@@ -2078,6 +2086,7 @@ section, .section {
   }
   .services .service-card h3 {
     font-size: 24px;
+    min-height: 72px;
   }
   .services .service-card .service-icon {
     position: absolute;
@@ -2091,182 +2100,110 @@ section, .section {
   }
 }
 /*--------------------------------------------------------------
-# Service Details Section
+# Tutorial Columns (Isotope Layout)
+# Isotope controla TODAS las animaciones
 --------------------------------------------------------------*/
-.service-details .service-details-slider {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  z-index: 1;
-}
-
-.service-details .service-details-slider .swiper-wrapper {
-  height: auto !important;
-}
-
-.service-details .service-details-slider .swiper-pagination {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  z-index: 2;
-}
-
-.service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background-color: var(--contrast-color);
-  opacity: 0.5;
-  transition: 0.3s;
-}
-
-.service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+/* Item base */
+.tutorial-col {
+  display: flex;
   opacity: 1;
-  width: 20px;
-  border-radius: 5px;
+  will-change: transform, opacity;
 }
 
-.service-details .content h3 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
+/* Isotope oculta elementos usando esta clase */
+.tutorial-col.isotope-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-.service-details .content p {
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
-  margin-bottom: 15px;
+/* Contenedor isotope */
+.isotope {
+  transition-property: height;
+  transition-duration: 0.5s;
 }
 
-.service-details .content .features .feature-box {
-  padding: 20px;
-  background: var(--surface-color);
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  height: 100%;
-  transition: 0.3s;
+/* Animación de movimiento (SOLO Isotope) */
+.isotope .tutorial-col {
+  transition-property: transform, opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
 }
 
-.service-details .content .features .feature-box:hover {
-  transform: translateY(-5px);
+/*--------------------------------------------------------------
+# Tutorial Search Box - Animado y moderno
+--------------------------------------------------------------*/
+.tutorial-search {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: searchFade 0.6s ease forwards;
+  animation-delay: 0.2s;
+  margin-top: 15px; /* un poco de espacio arriba */
 }
 
-.service-details .content .features .feature-box i {
-  font-size: 24px;
-  color: var(--accent-color);
-  margin-right: 15px;
-}
-
-.service-details .content .features .feature-box h4 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.service-details .service-info {
-  background: var(--surface-color);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-.service-details .service-info h4 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
-}
-
-.service-details .service-info .info-item {
-  margin-bottom: 25px;
-}
-
-.service-details .service-info .info-item:last-child {
-  margin-bottom: 0;
-}
-
-.service-details .service-info .info-item i {
-  font-size: 24px;
-  color: var(--accent-color);
-  margin-bottom: 10px;
-}
-
-.service-details .service-info .info-item h5 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.service-details .service-info .info-item p {
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
-  margin: 0;
-}
-
-.service-details .related-services {
-  background: var(--surface-color);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-.service-details .related-services h4 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
-}
-
-.service-details .related-services .service-item {
-  margin-bottom: 25px;
-  padding-bottom: 25px;
-  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-}
-
-.service-details .related-services .service-item:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.service-details .related-services .service-item i {
-  font-size: 24px;
-  color: var(--accent-color);
-  margin-bottom: 10px;
-}
-
-.service-details .related-services .service-item h5 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.service-details .related-services .service-item h5 a {
-  color: var(--heading-color);
-  transition: 0.3s;
-}
-
-.service-details .related-services .service-item h5 a:hover {
-  color: var(--accent-color);
-}
-
-.service-details .related-services .service-item p {
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
-  margin: 0;
-  font-size: 14px;
-}
-
-@media (max-width: 991px) {
-  .service-details .service-info,
-  .service-details .related-services {
-    margin-top: 30px;
+/* Animación de entrada */
+@keyframes searchFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-#service-details.section {
-  color: var(--default-color);
-  background-color: var(--background-color);
-  padding-top: 40px;
-  padding-bottom: 60px;
-  overflow: clip;
+/* Contenedor del input */
+.tutorial-search .search-box {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: var(--md-box-color);
+  display: flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 40%);
+}
+
+/* Hover suave */
+.tutorial-search .search-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-color);
+}
+
+/* Focus del input */
+.tutorial-search .search-box:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12), 0 0 0 2px color-mix(in srgb, var(--accent-color), transparent 70%);
+  border-color: var(--accent-color);
+}
+
+/* Input estilo limpio */
+.tutorial-search .search-box input {
+  border: none;
+  box-shadow: none !important;
+  outline: none;
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 1rem;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Input focus */
+.tutorial-search .search-box input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Icono de búsqueda */
+.tutorial-search .search-box .input-group-text {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+/* Icono reactivo al focus */
+.tutorial-search .search-box:focus-within .input-group-text i {
+  transform: scale(1.15);
+  color: var(--accent-color);
 }
 
 /**
@@ -2797,6 +2734,185 @@ section, .section {
   margin: 2rem auto;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/*--------------------------------------------------------------
+# Service Details Section
+--------------------------------------------------------------*/
+.service-details .service-details-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.service-details .service-details-slider .swiper-wrapper {
+  height: auto !important;
+}
+
+.service-details .service-details-slider .swiper-pagination {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: var(--contrast-color);
+  opacity: 0.5;
+  transition: 0.3s;
+}
+
+.service-details .service-details-slider .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 20px;
+  border-radius: 5px;
+}
+
+.service-details .content h3 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.service-details .content p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  margin-bottom: 15px;
+}
+
+.service-details .content .features .feature-box {
+  padding: 20px;
+  background: var(--surface-color);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  transition: 0.3s;
+}
+
+.service-details .content .features .feature-box:hover {
+  transform: translateY(-5px);
+}
+
+.service-details .content .features .feature-box i {
+  font-size: 24px;
+  color: var(--accent-color);
+  margin-right: 15px;
+}
+
+.service-details .content .features .feature-box h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.service-details .service-info {
+  background: var(--surface-color);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.service-details .service-info h4 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+}
+
+.service-details .service-info .info-item {
+  margin-bottom: 25px;
+}
+
+.service-details .service-info .info-item:last-child {
+  margin-bottom: 0;
+}
+
+.service-details .service-info .info-item i {
+  font-size: 24px;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.service-details .service-info .info-item h5 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.service-details .service-info .info-item p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  margin: 0;
+}
+
+.service-details .related-services {
+  background: var(--surface-color);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.service-details .related-services h4 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+}
+
+.service-details .related-services .service-item {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+.service-details .related-services .service-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.service-details .related-services .service-item i {
+  font-size: 24px;
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.service-details .related-services .service-item h5 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.service-details .related-services .service-item h5 a {
+  color: var(--heading-color);
+  transition: 0.3s;
+}
+
+.service-details .related-services .service-item h5 a:hover {
+  color: var(--accent-color);
+}
+
+.service-details .related-services .service-item p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  margin: 0;
+  font-size: 14px;
+}
+
+@media (max-width: 991px) {
+  .service-details .service-info,
+  .service-details .related-services {
+    margin-top: 30px;
+  }
+}
+#service-details.section {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding-top: 40px;
+  padding-bottom: 60px;
+  overflow: clip;
 }
 
 /*# sourceMappingURL=main.css.map */

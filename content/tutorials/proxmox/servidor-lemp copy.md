@@ -4,8 +4,11 @@ md-info:
 - Instalación de Debian 12 en LXC Proxmox
 - Configuración de Nginx como servidor web
 - Instalación y configuración de PHP y PHP-FPM
-- Betis
-- Sevilla
+- Optimización del stack LEMP para producción
+- cadiz
+- madrid
+- mala
+- betis
 
 related:
 - Configurar SSL en Nginx | /services/nginx-ssl.html | bi-server | Aprende a securizar tu servidor web
@@ -20,7 +23,7 @@ md-details:
 
 
 
-# esto es una prueba para enseñar a Carmela
+# Servidor LEMP en Debian 12 en LXC
 
 ---
 
