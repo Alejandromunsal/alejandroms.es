@@ -16,12 +16,16 @@ export function initDynamicMenu() {
     return Object.entries(data).map(([key, value]) => {
       const li = document.createElement('li');
       li.dataset.level = level;
+
+      const fullPath = `${basePath}/${key}`; // ruta completa para este li
+      li.dataset.path = fullPath;  // <-- aquí asignamos el path único
+
       li.classList.add('dropdown');
 
       const hasChildren = (Array.isArray(value) && value.length > 0) || (typeof value === 'object' && Object.keys(value).length > 0);
 
       const a = document.createElement('a');
-      a.href = hasChildren ? '#' : `/${basePath}/${key}`;
+      a.href = hasChildren ? '#' : fullPath;
       a.innerHTML = `<i class="${getIconClass(key)} navicon"></i>${key.charAt(0).toUpperCase() + key.slice(1)}`;
 
       if (hasChildren && !a.querySelector('.toggle-dropdown')) {
@@ -38,30 +42,26 @@ export function initDynamicMenu() {
 
       if (Array.isArray(value)) {
         value.forEach(f => {
-
           const childLi = document.createElement('li');
-
-          // ⭐ IMPORTANTE
           childLi.dataset.level = level + 1;
+          const childPath = `${fullPath}/${f}`; // ruta única para sub-item
+          childLi.dataset.path = childPath;
 
           const a = document.createElement('a');
-          a.href = `/${basePath}/${key}/${f}`;
-          a.innerHTML = `
-            <i class="bi bi-file-earmark-text navicon"></i>
-            ${f.replace(/-/g, ' ')}
-          `;
+          a.href = childPath;
+          a.innerHTML = `<i class="bi bi-file-earmark-text navicon"></i> ${f.replace(/-/g, ' ')}`;
 
           childLi.appendChild(a);
           submenu.appendChild(childLi);
         });
-      }
-      else if (typeof value === 'object') {
-        createMenuItems(value, `${basePath}/${key}`).forEach(c => submenu.appendChild(c));
+      } else if (typeof value === 'object') {
+        createMenuItems(value, fullPath, level + 1).forEach(c => submenu.appendChild(c));
       }
 
       return li;
     });
   };
+
 
   const loadDynamicMenuRecursive = (selector, section, basePath) => {
     const menu = document.querySelector(selector);

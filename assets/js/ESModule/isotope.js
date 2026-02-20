@@ -1,47 +1,52 @@
 // ESModule/isotope.js
 export function initIsotope() {
-    window.initDynamicFeatures = () => {
-      document.querySelectorAll('.isotope-layout').forEach(item => {
-        const container = item.querySelector('.isotope-container');
-        if (!container) return;
-  
-        const layout = item.getAttribute('data-layout') || 'masonry';
-        const filter = item.getAttribute('data-default-filter') || '*';
-        const sort = item.getAttribute('data-sort') || 'original-order';
-        let iso;
-  
-        imagesLoaded(container, () => {
-          iso = new Isotope(container, { itemSelector: '.isotope-item', layoutMode: layout, filter, sortBy: sort });
-        });
-  
-        item.querySelectorAll('.isotope-filters li').forEach(f => {
-          f.addEventListener('click', function () {
-            item.querySelector('.filter-active')?.classList.remove('filter-active');
-            this.classList.add('filter-active');
-            iso?.arrange({ filter: this.getAttribute('data-filter') });
-            AOS?.refresh();
-          });
-        });
+  document.querySelectorAll('.isotope-layout').forEach(function (isotopeItem) {
+    let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
+    let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
+    let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
+
+    let initIsotope;
+    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function () {
+      initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
+        itemSelector: '.isotope-item',
+        layoutMode: layout,
+        filter: filter,
+        sortBy: sort
       });
-  
-      // Skills animation
-      document.querySelectorAll('.skills-animation').forEach(el => {
-        if (!window.Waypoint) return;
-        new Waypoint({
-          element: el,
-          offset: '80%',
-          handler: () => el.querySelectorAll('.progress-bar').forEach(p => p.style.width = p.getAttribute('aria-valuenow') + '%')
+    });
+
+    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function (filters) {
+      filters.addEventListener('click', function () {
+        isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
+        this.classList.add('filter-active');
+        initIsotope.arrange({
+          filter: this.getAttribute('data-filter')
         });
-      });
-  
-      // Scroll to hash
-      if (window.location.hash) {
-        const section = document.querySelector(window.location.hash);
-        if (section) setTimeout(() => {
-          const m = parseInt(getComputedStyle(section).scrollMarginTop);
-          window.scrollTo({ top: section.offsetTop - m, behavior: 'smooth' });
-        }, 100);
-      }
-    };
+        if (typeof aosInit === 'function') {
+          aosInit();
+        }
+      }, false);
+    });
+
+  });
+
+  // Skills animation
+  document.querySelectorAll('.skills-animation').forEach(el => {
+    if (!window.Waypoint) return;
+    new Waypoint({
+      element: el,
+      offset: '80%',
+      handler: () => el.querySelectorAll('.progress-bar').forEach(p => p.style.width = p.getAttribute('aria-valuenow') + '%')
+    });
+  });
+
+  // Scroll to hash
+  if (window.location.hash) {
+    const section = document.querySelector(window.location.hash);
+    if (section) setTimeout(() => {
+      const m = parseInt(getComputedStyle(section).scrollMarginTop);
+      window.scrollTo({ top: section.offsetTop - m, behavior: 'smooth' });
+    }, 100);
   }
-  
+};
+

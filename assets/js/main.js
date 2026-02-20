@@ -14,7 +14,7 @@ import { initSwiper } from './ESModule/swiper.js';
 import { initIsotope } from './ESModule/isotope.js';
 import { initScrollTop } from './ESModule/scrollTop.js';
 import { initMarkdownLoader } from './ESModule/markdownLoader.js';
-import { initMenuAutoOpenPersistent } from './ESModule/menuAutoOpen.js';
+//import { initMenuAutoOpenPersistent } from './ESModule/menuAutoOpen.js';
 import { initPageTitle } from './ESModule/pageTitle.js';
 
 //import { initRouter } from './ESModule/router.js';
@@ -36,7 +36,7 @@ document.addEventListener('componentsLoaded', () => {
   initGLightbox();
   initSwiper();
   initIsotope();
-  initMenuAutoOpenPersistent();
+  //initMenuAutoOpenPersistent();
 
   initMarkdownLoader();
   initDynamicCards('tutorials', 'tutorial-cards');
