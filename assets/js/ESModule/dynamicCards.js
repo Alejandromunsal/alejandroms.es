@@ -15,6 +15,7 @@ export function initDynamicCards(section = 'tutorials', containerId = 'tutorial-
     web: 'si si-html5',
     arduino: 'si si-arduino',
     esp32: 'bi bi-cpu',
+    windows: 'bi bi-windows',
     default: 'bi bi-hdd-stack'
   };
   const getIconClass = cat =>

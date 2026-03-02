@@ -1,4 +1,4 @@
-![Install Proxmox](/assets/img/tutoriales/cloudflare-ssh-vscode/SSH%20+%20VSCode%20+%20Cloudflared%20Zero%20Trust.png)
+![Install Proxmox](/assets/img/tutoriales/cloudflare-ssh-vscode/SSH%20+%20VSCode%20+%20Cloudflare%20Zero%20Trust.png)
 
 md-info:
 - Configuración de SSH con Cloudflare Zero Trust en Windows
@@ -22,7 +22,7 @@ md-details:
 Este tutorial explica **paso a paso** cómo configurar un acceso SSH seguro usando:
 
 - Cloudflare Zero Trust
-- `cloudflared`
+- `cloudflare`
 - SSH keys (`ed25519`)
 - `ssh-agent` en Windows
 - VS Code Remote SSH
@@ -37,30 +37,30 @@ sin introducir contraseña continuamente y de forma segura.
 
 ---
 
-## 1. Instalar cloudflared
+## 1. Instalar cloudflare
 
 **Qué hacemos:** descargamos la herramienta de Cloudflare que nos permite abrir un túnel SSH seguro bajo Zero Trust.  
-**Por qué:** cloudflared es necesario para autenticar el SSH a través de Cloudflare, en lugar de abrir directamente el puerto 22.
+**Por qué:** cloudflare es necesario para autenticar el SSH a través de Cloudflare, en lugar de abrir directamente el puerto 22.
 
-1. Descargar `cloudflared.exe` desde Cloudflare.
+1. Descargar `cloudflare.exe` desde Cloudflare.
 2. Crear carpeta:
 
 ```
-C:\Program Files\cloudflared
+C:\Program Files\cloudflare
 ```
 
 3. Copiar dentro:
 
 ```
-cloudflared.exe
+cloudflare.exe
 ```
 
 ---
 
-## 2. Añadir cloudflared al PATH
+## 2. Añadir cloudflare al PATH
 
-**Qué hacemos:** añadimos la carpeta donde está `cloudflared.exe` a las variables de entorno.  
-**Por qué:** así podemos ejecutar `cloudflared` desde cualquier terminal sin escribir la ruta completa.
+**Qué hacemos:** añadimos la carpeta donde está `cloudflare.exe` a las variables de entorno.  
+**Por qué:** así podemos ejecutar `cloudflare` desde cualquier terminal sin escribir la ruta completa.
 
 Abrir:
 
@@ -72,7 +72,7 @@ Editar variables de entorno del sistema
 Añadir a **Path (usuario o sistema)**:
 
 ```
-C:\Program Files\cloudflared
+C:\Program Files\cloudflare
 ```
 ![Path](/assets/img/tutoriales/cloudflare-ssh-vscode/path.png)
 
@@ -81,7 +81,7 @@ Cerrar y abrir PowerShell nuevo.
 Verificar:
 
 ```powershell
-cloudflared --version
+cloudflare --version
 ```
 
 ---
@@ -222,7 +222,7 @@ ssh-add -l
 ## 8. Configurar SSH config
 
 **Qué hacemos:** creamos alias y configuraciones en `~/.ssh/config`.  
-**Por qué:** permite usar comandos simples (`ssh example`) y ejecutar `cloudflared` automáticamente.
+**Por qué:** permite usar comandos simples (`ssh example`) y ejecutar `cloudflare` automáticamente.
 
 Ejemplo:
 
@@ -230,7 +230,7 @@ Ejemplo:
 Host example
     HostName ssh.example.es
     User user
-    ProxyCommand cloudflared access ssh --hostname %h
+    ProxyCommand cloudflare access ssh --hostname %h
     IdentityFile ~/.ssh/id_ed25519
 ```
 
@@ -242,11 +242,11 @@ Host example
 **Por qué:** Cloudflare valida la identidad y genera un token de sesión seguro.
 
 ```powershell
-cloudflared access login https://ssh.example.es
+cloudflare access login https://ssh.example.es
 ```
 
 Se abrirá el navegador para autenticación.
-![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflaredAcces.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflaredCodeAccess.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflaredAccessRequested.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflaredAccessSuccess.png) 
+![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflareAcces.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflareCodeAccess.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflareAccessRequested.png)![Editar variables de entorno del sistema](/assets/img/tutoriales/cloudflare-ssh-vscode/cloudflareAccessSuccess.png) 
 
 
 ---
@@ -290,7 +290,7 @@ Authenticated
 ## 12. Uso con VS Code
 
 **Qué hacemos:** conectamos VS Code al servidor usando Remote SSH.  
-**Por qué:** VS Code aprovechará la misma configuración SSH y cloudflared automáticamente.
+**Por qué:** VS Code aprovechará la misma configuración SSH y cloudflare automáticamente.
 
 1. Instalar extensión **Remote - SSH**
 2. Abrir:
@@ -318,7 +318,7 @@ VS Code
    ↓
 SSH
    ↓
-cloudflared
+cloudflare
    ↓
 Cloudflare Zero Trust
    ↓
@@ -336,7 +336,7 @@ Con:
 
 ## Troubleshooting rápido
 
-- **cloudflared no reconocido:** revisar PATH y reiniciar terminal.  
+- **cloudflare no reconocido:** revisar PATH y reiniciar terminal.  
 - **Script bloqueado:** `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`  
 - **Clave no usada:** `ssh-add -l`  
 
