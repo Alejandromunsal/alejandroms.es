@@ -7,6 +7,7 @@ export function initDynamicMenu() {
     web: 'si si-html5',
     arduino: 'si si-arduino',
     esp32: 'bi bi-cpu',
+    windows: "bi bi-windows",
     default: 'bi bi-hdd-stack'
   };
 
@@ -17,7 +18,7 @@ export function initDynamicMenu() {
       const li = document.createElement('li');
       li.dataset.level = level;
 
-      const fullPath = `${basePath}/${key}`; // ruta completa para este li
+      const fullPath = `/${basePath}/${key}`; // ruta completa para este li
       li.dataset.path = fullPath;  // <-- aquí asignamos el path único
 
       li.classList.add('dropdown');

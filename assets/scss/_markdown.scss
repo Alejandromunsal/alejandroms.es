@@ -91,3 +91,16 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,.08);
 }
+
+/* Bloques de código PowerShell */
+pre code.language-powershell {
+  background-color: #ffffff;   /* Azul oscuro tipo PowerShell */
+  color: #012456;              /* Texto blanco */
+  font-family: "Consolas", "Courier New", monospace;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: block;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
